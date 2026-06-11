@@ -1,6 +1,159 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:padding="24dp"
+tools:context=".MainActivity">
 
+<TextView
+    android:id="@+id/tvTitle"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="32dp"
+    android:text="Que quieres\nregistrar?"
+    android:textAlignment="center"
+    android:textColor="@color/text_main"
+    android:textSize="28sp"
+    android:fontFamily="sans-serif-black"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent" />
+
+<com.google.android.material.card.MaterialCardView
+    android:id="@+id/cardRegisterCoca"
+    style="@style/Widget.CocaBreak.Card.Coca"
+    android:layout_width="0dp"
+    android:layout_height="160dp"
+    android:layout_marginTop="32dp"
+    android:clickable="true"
+    android:focusable="true"
+    app:layout_constraintTop_toBottomOf="@id/tvTitle"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Registrar Coca-Cola"
+            android:textColor="@color/coca_red"
+            android:textSize="18sp"
+            android:fontFamily="sans-serif-black"
+            android:layout_marginBottom="12dp"/>
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@mipmap/ic_launcher"
+            android:contentDescription="Icono Coca Cola" />
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>
+
+<com.google.android.material.card.MaterialCardView
+    android:id="@+id/cardRegisterWater"
+    style="@style/Widget.CocaBreak.Card.Water"
+    android:layout_width="0dp"
+    android:layout_height="160dp"
+    android:layout_marginTop="20dp"
+    android:clickable="true"
+    android:focusable="true"
+    app:layout_constraintTop_toBottomOf="@id/cardRegisterCoca"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Registrar agua"
+            android:textColor="@color/water_blue_btn"
+            android:textSize="18sp"
+            android:fontFamily="sans-serif-black"
+            android:layout_marginBottom="12dp"/>
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@mipmap/ic_launcher"
+            android:contentDescription="Icono Agua" />
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>
+
+<com.google.android.material.card.MaterialCardView
+    android:id="@+id/cardTips"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="48dp"
+    app:cardBackgroundColor="@color/card_gray"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="0dp"
+    app:layout_constraintBottom_toTopOf="@id/bottomNavigationMock"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/tvTipTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="CONSEJOS PARA TI"
+            android:textColor="@color/text_muted"
+            android:textSize="11sp"
+            android:fontFamily="sans-serif-black"
+            android:letterSpacing="0.05"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/imgTipIcon" />
+
+        <TextView
+            android:id="@+id/tvTipContent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Comer fruta disminuye el antojo de azúcar"
+            android:textColor="@color/text_main"
+            android:textSize="13sp"
+            android:fontFamily="sans-serif-medium"
+            app:layout_constraintTop_toBottomOf="@id/tvTipTitle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/imgTipIcon" />
+
+        <ImageView
+            android:id="@+id/imgTipIcon"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:src="@mipmap/ic_launcher"
+            android:contentDescription="Icono Consejo"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>
+
+<View
+    android:id="@+id/bottomNavigationMock"
+    android:layout_width="0dp"
+    android:layout_height="56dp"
+    android:background="@color/white"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
