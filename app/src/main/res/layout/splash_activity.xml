@@ -4,7 +4,6 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F8F9F5"
     android:gravity="center"
     android:orientation="vertical"
     android:padding="32dp">
@@ -28,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="CocaBreak"
-            android:textColor="#E50914"
+            android:textColor="@color/coca_red"
             android:textSize="36sp"
             android:fontFamily="sans-serif-black"
             android:letterSpacing="-0.02" />
@@ -39,7 +38,7 @@
             android:layout_marginTop="12dp"
             android:text="Pequeños cambios, grandes resultados."
             android:textAlignment="center"
-            android:textColor="#5A5C59"
+            android:textColor="@color/text_muted"
             android:textSize="16sp"
             android:fontFamily="sans-serif-medium"
             android:lineSpacingMultiplier="1.2" />
@@ -52,7 +51,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
         android:indeterminate="true"
-        app:indicatorColor="#A4061E"
+        app:indicatorColor="@color/coca_red_dark"
         app:indicatorSize="40dp"
         app:trackCornerRadius="4dp"
         app:trackThickness="4dp" />
