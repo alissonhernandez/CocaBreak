@@ -1,12 +1,10 @@
-package com.example.cocabreak;
+package com.example.cocabreak.activities;
 
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -14,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.example.cocabreak.R;
 
 public class ConfiguracionInicialActivity extends AppCompatActivity {
 
