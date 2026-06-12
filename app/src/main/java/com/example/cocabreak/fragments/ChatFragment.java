@@ -7,6 +7,6 @@ import com.example.cocabreak.R;
 public class ChatFragment extends Fragment {
 
     public ChatFragment() {
-        //super(R.layout.fragment_chat);
+        super(R.layout.fragment_chat);
     }
 }

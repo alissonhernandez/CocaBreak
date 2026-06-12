@@ -7,6 +7,6 @@ import com.example.cocabreak.R;
 public class RetosFragment extends Fragment {
 
     public RetosFragment() {
-        //super(R.layout.fragment_retos);
+        super(R.layout.fragment_retos);
     }
 }

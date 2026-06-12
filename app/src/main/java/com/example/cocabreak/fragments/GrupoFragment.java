@@ -7,6 +7,6 @@ import com.example.cocabreak.R;
 public class GrupoFragment extends Fragment {
 
     public GrupoFragment() {
-        //super(R.layout.fragment_grupo);
+        super(R.layout.fragment_grupos);
     }
 }

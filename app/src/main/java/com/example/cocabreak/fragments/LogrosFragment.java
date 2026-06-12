@@ -7,6 +7,6 @@ import com.example.cocabreak.R;
 public class LogrosFragment extends Fragment {
 
     public LogrosFragment() {
-        //super(R.layout.fragment_logros);
+        super(R.layout.fragment_logros);
     }
 }
