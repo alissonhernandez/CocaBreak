@@ -1,159 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:padding="24dp"
-tools:context=".MainActivity">
-
-<TextView
-    android:id="@+id/tvTitle"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="32dp"
-    android:text="Que quieres\nregistrar?"
-    android:textAlignment="center"
-    android:textColor="@color/text_main"
-    android:textSize="28sp"
-    android:fontFamily="sans-serif-black"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toEndOf="parent" />
-
-<com.google.android.material.card.MaterialCardView
-    android:id="@+id/cardRegisterCoca"
-    style="@style/Widget.CocaBreak.Card.Coca"
-    android:layout_width="0dp"
-    android:layout_height="160dp"
-    android:layout_marginTop="32dp"
-    android:clickable="true"
-    android:focusable="true"
-    app:layout_constraintTop_toBottomOf="@id/tvTitle"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toEndOf="parent">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_app">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="16dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Registrar Coca-Cola"
-            android:textColor="@color/coca_red"
-            android:textSize="18sp"
-            android:fontFamily="sans-serif-black"
-            android:layout_marginBottom="12dp"/>
-
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@mipmap/ic_launcher"
-            android:contentDescription="Icono Coca Cola" />
-    </LinearLayout>
-</com.google.android.material.card.MaterialCardView>
-
-<com.google.android.material.card.MaterialCardView
-    android:id="@+id/cardRegisterWater"
-    style="@style/Widget.CocaBreak.Card.Water"
-    android:layout_width="0dp"
-    android:layout_height="160dp"
-    android:layout_marginTop="20dp"
-    android:clickable="true"
-    android:focusable="true"
-    app:layout_constraintTop_toBottomOf="@id/cardRegisterCoca"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toEndOf="parent">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="16dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Registrar agua"
-            android:textColor="@color/water_blue_btn"
-            android:textSize="18sp"
-            android:fontFamily="sans-serif-black"
-            android:layout_marginBottom="12dp"/>
-
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@mipmap/ic_launcher"
-            android:contentDescription="Icono Agua" />
-    </LinearLayout>
-</com.google.android.material.card.MaterialCardView>
-
-<com.google.android.material.card.MaterialCardView
-    android:id="@+id/cardTips"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="48dp"
-    app:cardBackgroundColor="@color/card_gray"
-    app:cardCornerRadius="16dp"
-    app:cardElevation="0dp"
-    app:layout_constraintBottom_toTopOf="@id/bottomNavigationMock"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toEndOf="parent">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:orientation="vertical"
+        android:id="@+id/main"
+        android:padding="28dp"
+        android:gravity="center_horizontal">
 
         <TextView
-            android:id="@+id/tvTipTitle"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="CONSEJOS PARA TI"
+            android:text="Crear cuenta"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            android:textColor="@color/coca_red"
+            android:layout_marginTop="50dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Empieza tu cambio saludable"
+            android:textSize="16sp"
             android:textColor="@color/text_muted"
-            android:textSize="11sp"
-            android:fontFamily="sans-serif-black"
-            android:letterSpacing="0.05"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/imgTipIcon" />
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="35dp" />
+
+        <EditText
+            android:id="@+id/etNombre"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:hint="Nombre completo"
+            android:padding="14dp"
+            android:background="@color/white"
+            android:textColor="@color/text_main"
+            android:textColorHint="@color/text_muted" />
+
+        <EditText
+            android:id="@+id/etCorreo"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:hint="Correo electrónico"
+            android:inputType="textEmailAddress"
+            android:padding="14dp"
+            android:background="@color/white"
+            android:textColor="@color/text_main"
+            android:textColorHint="@color/text_muted"
+            android:layout_marginTop="14dp" />
+
+        <EditText
+            android:id="@+id/etPassword"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:hint="Contraseña"
+            android:inputType="textPassword"
+            android:padding="14dp"
+            android:background="@color/white"
+            android:textColor="@color/text_main"
+            android:textColorHint="@color/text_muted"
+            android:layout_marginTop="14dp" />
+
+        <EditText
+            android:id="@+id/etConfirmPassword"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:hint="Confirmar contraseña"
+            android:inputType="textPassword"
+            android:padding="14dp"
+            android:background="@color/white"
+            android:textColor="@color/text_main"
+            android:textColorHint="@color/text_muted"
+            android:layout_marginTop="14dp" />
+
+        <Button
+            android:id="@+id/btnCrearCuenta"
+            android:layout_width="match_parent"
+            android:layout_height="58dp"
+            android:text="Crear cuenta"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/coca_red"
+            android:layout_marginTop="28dp" />
 
         <TextView
-            android:id="@+id/tvTipContent"
-            android:layout_width="0dp"
+            android:id="@+id/tvIrLogin"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="Comer fruta disminuye el antojo de azúcar"
-            android:textColor="@color/text_main"
-            android:textSize="13sp"
-            android:fontFamily="sans-serif-medium"
-            app:layout_constraintTop_toBottomOf="@id/tvTipTitle"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/imgTipIcon" />
+            android:text="Ya tengo cuenta"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/water_blue_btn"
+            android:layout_marginTop="22dp" />
 
-        <ImageView
-            android:id="@+id/imgTipIcon"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:src="@mipmap/ic_launcher"
-            android:contentDescription="Icono Consejo"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</com.google.android.material.card.MaterialCardView>
-
-<View
-    android:id="@+id/bottomNavigationMock"
-    android:layout_width="0dp"
-    android:layout_height="56dp"
-    android:background="@color/white"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toEndOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+</ScrollView>

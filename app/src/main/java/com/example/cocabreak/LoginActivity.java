@@ -29,13 +29,21 @@ public class LoginActivity extends AppCompatActivity {
         tvRegistrarse = findViewById(R.id.tvRegistrarse);
 
         btnLogin.setOnClickListener(v -> {
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            Intent intent = new Intent(
+                    LoginActivity.this,
+                    MainActivity.class
+            );
+
             startActivity(intent);
             finish();
         });
 
         tvRegistrarse.setOnClickListener(v -> {
-            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+            Intent intent = new Intent(
+                    LoginActivity.this,
+                    RegisterActivity.class
+            );
+
             startActivity(intent);
         });
     }

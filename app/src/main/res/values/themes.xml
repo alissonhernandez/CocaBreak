@@ -1,19 +1,12 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.CocaBreak"
-        parent="Theme.Material3.DayNight.NoActionBar">
-
+    <style name="Base.Theme.CocaBreak" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/coca_red</item>
         <item name="colorPrimaryContainer">@color/coca_red_dark</item>
         <item name="colorOnPrimary">@color/white</item>
-
         <item name="android:windowBackground">@color/bg_app</item>
-
         <item name="colorSurface">@color/white</item>
         <item name="colorOnSurface">@color/text_main</item>
-
         <item name="android:statusBarColor">@color/bg_app</item>
-
     </style>
 
     <style name="Widget.CocaBreak.EditText" parent="Widget.AppCompat.EditText">
@@ -24,18 +17,26 @@
 
     <style name="Widget.CocaBreak.Card.Coca" parent="Widget.MaterialComponents.CardView">
         <item name="cardBackgroundColor">@color/coca_red_light</item>
-        <item name="cardCornerRadius">12dp</item>
-        <item name="cardElevation">0dp</item> </style>
+        <item name="cardCornerRadius">16dp</item>
+        <item name="cardElevation">2dp</item>
+    </style>
 
     <style name="Widget.CocaBreak.Card.Water" parent="Widget.MaterialComponents.CardView">
         <item name="cardBackgroundColor">@color/water_blue_light</item>
-        <item name="cardCornerRadius">12dp</item>
+        <item name="cardCornerRadius">16dp</item>
+        <item name="cardElevation">2dp</item>
+    </style>
+
+    <style name="Widget.CocaBreak.Card.Gray" parent="Widget.MaterialComponents.CardView">
+        <item name="cardBackgroundColor">@color/card_gray</item>
+        <item name="cardCornerRadius">16dp</item>
         <item name="cardElevation">0dp</item>
     </style>
+
     <style name="Widget.CocaBreak.Button.Red" parent="Widget.MaterialComponents.Button">
         <item name="backgroundTint">@color/coca_red</item>
         <item name="android:textColor">@color/white</item>
-        <item name="cornerRadius">24dp</item>
+        <item name="cornerRadius">28dp</item>
         <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:textAllCaps">false</item>
     </style>
@@ -43,7 +44,7 @@
     <style name="Widget.CocaBreak.Button.Blue" parent="Widget.MaterialComponents.Button">
         <item name="backgroundTint">@color/water_blue_btn</item>
         <item name="android:textColor">@color/white</item>
-        <item name="cornerRadius">24dp</item>
+        <item name="cornerRadius">28dp</item>
         <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:textAllCaps">false</item>
     </style>
