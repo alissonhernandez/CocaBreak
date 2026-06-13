@@ -1,4 +1,4 @@
-package com.example.cocabreak;
+package com.example.cocabreak.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.example.cocabreak.R;
 
 public class SplashActivity extends AppCompatActivity {
     private static final int TIEMPO_SPLASH = 2500;
