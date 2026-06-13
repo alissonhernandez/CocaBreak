@@ -2,12 +2,13 @@ package com.example.cocabreak.fragments;
 
 import android.os.Bundle;
 import android.view.View;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import com.example.cocabreak.R;
+import com.google.android.material.card.MaterialCardView;
 
 public class HomeFragment extends Fragment {
 
@@ -20,22 +21,33 @@ public class HomeFragment extends Fragment {
                               @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        CardView cardRetos = view.findViewById(R.id.cardRetos);
-        CardView cardLogros = view.findViewById(R.id.cardLogros);
-        CardView cardGrupo = view.findViewById(R.id.cardGrupo);
-        CardView cardChat = view.findViewById(R.id.cardChat);
+        MaterialCardView cardReto = view.findViewById(R.id.cardReto);
 
-        cardRetos.setOnClickListener(v ->
-                abrirFragment(new RetosFragment()));
+        MaterialCardView cardLogro = view.findViewById(R.id.cardLogro);
 
-        cardLogros.setOnClickListener(v ->
-                abrirFragment(new LogrosFragment()));
+        MaterialCardView cardGrupo = view.findViewById(R.id.cardGrupo);
 
-        cardGrupo.setOnClickListener(v ->
-                abrirFragment(new GrupoFragment()));
+        MaterialCardView cardChat = view.findViewById(R.id.cardChat);
 
-        cardChat.setOnClickListener(v ->
-                abrirFragment(new ChatFragment()));
+        if (cardReto != null) {
+            cardReto.setOnClickListener(v ->
+                    abrirFragment(new RetosFragment()));
+        }
+
+        if (cardLogro != null) {
+            cardLogro.setOnClickListener(v ->
+                    abrirFragment(new LogrosFragment()));
+        }
+
+        if (cardGrupo != null) {
+            cardGrupo.setOnClickListener(v ->
+                    abrirFragment(new GrupoFragment()));
+        }
+
+        if (cardChat != null) {
+            cardChat.setOnClickListener(v ->
+                    abrirFragment(new ChatFragment()));
+        }
     }
 
     private void abrirFragment(Fragment fragment) {
