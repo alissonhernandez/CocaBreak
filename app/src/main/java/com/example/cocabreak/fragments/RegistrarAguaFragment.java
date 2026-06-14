@@ -3,6 +3,7 @@ package com.example.cocabreak.fragments;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -17,6 +18,7 @@ public class RegistrarAguaFragment extends Fragment {
 
     private MaterialCardView cardVaso;
     private MaterialCardView cardBotella;
+    private TextView tvVaso, tvBotella;
 
     private int cantidadSeleccionada = 0;
 
@@ -31,6 +33,8 @@ public class RegistrarAguaFragment extends Fragment {
 
         cardVaso = view.findViewById(R.id.cardVaso);
         cardBotella = view.findViewById(R.id.cardBotella);
+        tvVaso = view.findViewById(R.id.tvVaso);
+        tvBotella = view.findViewById(R.id.tvBotella);
 
         MaterialButton btnRegistrar =
                 view.findViewById(R.id.btnRegistrar);
@@ -86,6 +90,12 @@ public class RegistrarAguaFragment extends Fragment {
                 Color.parseColor("#42A5F5")
         );
 
+        if (seleccionada == cardVaso){
+            tvVaso.setTextColor(Color.parseColor("#1E88F5"));
+        }else {
+            tvBotella.setTextColor(Color.parseColor("#1E88E5"));
+        }
+
         cantidadSeleccionada = cantidad;
     }
 
@@ -108,5 +118,8 @@ public class RegistrarAguaFragment extends Fragment {
                     Color.parseColor("#90CAF9")
             );
         }
+
+        tvVaso.setTextColor(Color.parseColor("#212121"));
+        tvBotella.setTextColor(Color.parseColor("#212121"));
     }
 }

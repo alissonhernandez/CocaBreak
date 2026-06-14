@@ -191,6 +191,7 @@
                             android:src="@drawable/vaso"/>
 
                         <TextView
+                            android:id="@+id/tvVaso"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
@@ -234,6 +235,7 @@
                             android:src="@drawable/botella"/>
 
                         <TextView
+                            android:id="@+id/tvBotella"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
