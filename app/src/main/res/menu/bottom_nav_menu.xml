@@ -7,14 +7,19 @@
         android:icon="@drawable/ic_home"/>
 
     <item
-        android:id="@+id/nav_coca"
-        android:title="Coca"
-        android:icon="@drawable/ic_soda"/>
+        android:id="@+id/nav_registrar"
+        android:title="Registrar"
+        android:icon="@drawable/ic_registrar"/>
 
     <item
-        android:id="@+id/nav_agua"
-        android:title="Agua"
-        android:icon="@drawable/ic_agua"/>
+        android:id="@+id/nav_retos"
+        android:title="Retos"
+        android:icon="@drawable/ic_retos"/>
+
+    <item
+        android:id="@+id/nav_logros"
+        android:title="Logros"
+        android:icon="@drawable/ic_logros"/>
 
     <item
         android:id="@+id/nav_perfil"

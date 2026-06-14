@@ -12,8 +12,9 @@ import androidx.fragment.app.Fragment;
 import com.example.cocabreak.R;
 import com.example.cocabreak.fragments.HomeFragment;
 import com.example.cocabreak.fragments.PerfilFragment;
-import com.example.cocabreak.fragments.RegistrarAguaFragment;
-import com.example.cocabreak.fragments.RegistrarCocaFragment;
+import com.example.cocabreak.fragments.RegistrarFragment;
+import com.example.cocabreak.fragments.RetosFragment;
+import com.example.cocabreak.fragments.LogrosFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
@@ -42,11 +43,14 @@ public class MainActivity extends AppCompatActivity {
             if(item.getItemId() == R.id.nav_home){
                 fragment = new HomeFragment();
             }
-            else if(item.getItemId() == R.id.nav_coca){
-                fragment = new RegistrarCocaFragment();
+            else if(item.getItemId() == R.id.nav_registrar){
+                fragment = new RegistrarFragment();
             }
-            else if(item.getItemId() == R.id.nav_agua){
-                fragment = new RegistrarAguaFragment();
+            else if(item.getItemId() == R.id.nav_retos){
+                fragment = new RetosFragment();
+            }
+            else if(item.getItemId() == R.id.nav_logros){
+                fragment = new LogrosFragment();
             }
             else if(item.getItemId() == R.id.nav_perfil){
                 fragment = new PerfilFragment();
