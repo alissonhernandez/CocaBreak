@@ -2,63 +2,99 @@ package com.example.cocabreak.fragments;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cocabreak.R;
+import com.example.cocabreak.adapters.MensajeAdapter;
+import com.example.cocabreak.models.Mensaje;
+import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ChatFragment extends Fragment {
 
-    private ArrayList<String> mensajes;
-    private ArrayAdapter<String> adapter;
+    private List<Mensaje> mensajes;
+    private MensajeAdapter adapter;
 
     public ChatFragment() {
         super(R.layout.fragment_chat);
     }
 
     @Override
-    public void onViewCreated(@NonNull View view,
-                              @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(
+            @NonNull View view,
+            @Nullable Bundle savedInstanceState) {
+
         super.onViewCreated(view, savedInstanceState);
 
-        ListView listMensajes =
-                view.findViewById(R.id.listMensajes);
+        RecyclerView rvMensajes =
+                view.findViewById(R.id.rvMensajes);
 
         EditText etMensaje =
                 view.findViewById(R.id.etMensaje);
 
-        Button btnEnviar =
+        MaterialButton btnEnviar =
                 view.findViewById(R.id.btnEnviar);
 
         mensajes = new ArrayList<>();
 
-        mensajes.add("Juan: Ya tomé 2 litros");
-        mensajes.add("María: Voy muy bien hoy");
+        mensajes.add(
+                new Mensaje(
+                        "Juan: Ya tomé mis 2 litros ",
+                        false
+                )
+        );
 
-        adapter = new ArrayAdapter<>(
-                requireContext(),
-                android.R.layout.simple_list_item_1,
-                mensajes);
+        mensajes.add(
+                new Mensaje(
+                        "María: Excelente trabajo ",
+                        false
+                )
+        );
 
-        listMensajes.setAdapter(adapter);
+        mensajes.add(
+                new Mensaje(
+                        "Yo: Voy por mi segundo vaso",
+                        true
+                )
+        );
+
+        adapter = new MensajeAdapter(mensajes);
+
+        rvMensajes.setLayoutManager(
+                new LinearLayoutManager(requireContext())
+        );
+
+        rvMensajes.setAdapter(adapter);
 
         btnEnviar.setOnClickListener(v -> {
 
-            String texto = etMensaje.getText().toString();
+            String texto =
+                    etMensaje.getText().toString().trim();
 
             if (!texto.isEmpty()) {
 
-                mensajes.add("Yo: " + texto);
+                mensajes.add(
+                        new Mensaje(
+                                texto,
+                                true
+                        )
+                );
 
-                adapter.notifyDataSetChanged();
+                adapter.notifyItemInserted(
+                        mensajes.size() - 1
+                );
+
+                rvMensajes.scrollToPosition(
+                        mensajes.size() - 1
+                );
 
                 etMensaje.setText("");
             }
