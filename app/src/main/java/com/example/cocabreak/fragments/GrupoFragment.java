@@ -2,13 +2,14 @@ package com.example.cocabreak.fragments;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.cocabreak.R;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class GrupoFragment extends Fragment {
 
@@ -21,18 +22,38 @@ public class GrupoFragment extends Fragment {
                               @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Button btnIrChat = view.findViewById(R.id.btnIrChat);
+        MaterialButton btnIrChat =
+                view.findViewById(R.id.btnIrChat);
 
-        btnIrChat.setOnClickListener(v -> {
+        FloatingActionButton btnCrearGrupo =
+                view.findViewById(R.id.btnCrearGrupo);
 
-            requireActivity()
-                    .getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragmentContainer,
-                            new ChatFragment())
-                    .addToBackStack(null)
-                    .commit();
+        btnIrChat.setOnClickListener(v ->
 
-        });
+                requireActivity()
+                        .getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(
+                                R.id.fragmentContainer,
+                                new ConversacionesFragment()
+                        )
+                        .addToBackStack(null)
+                        .commit()
+
+        );
+
+        btnCrearGrupo.setOnClickListener(v ->
+
+                requireActivity()
+                        .getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(
+                                R.id.fragmentContainer,
+                                new CrearGrupoFragment()
+                        )
+                        .addToBackStack(null)
+                        .commit()
+
+        );
     }
 }
