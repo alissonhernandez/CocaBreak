@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "292980427913",
+    "project_id": "cocabreak-5fd18",
+    "storage_bucket": "cocabreak-5fd18.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:292980427913:android:88610c9d7f422411e58a58",
+        "android_client_info": {
+          "package_name": "com.example.cocabreak"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD3U7OfPzJrAp4kchQYT0rb0fyoDwEVxbU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
