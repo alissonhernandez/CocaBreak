@@ -12,6 +12,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
 
 import com.example.cocabreak.R;
 
@@ -89,15 +93,68 @@ public class ConfiguracionInicialActivity extends AppCompatActivity {
         });
 
         btnContinuar.setOnClickListener(v -> {
+
             if (cocaSeleccionada == 0 || aguaSeleccionada == 0) {
-                Toast.makeText(this, "Selecciona tus preferencias", Toast.LENGTH_SHORT).show();
+
+                Toast.makeText(
+                        this,
+                        "Selecciona tus preferencias",
+                        Toast.LENGTH_SHORT
+                ).show();
+
                 return;
             }
-            Intent intent = new Intent(ConfiguracionInicialActivity.this, MainActivity.class);
-            intent.putExtra("metaAgua", aguaSeleccionada);
-            intent.putExtra("cocasDiarias", cocaSeleccionada);
-            startActivity(intent);
-            finish();
+
+            String uid =
+                    FirebaseAuth.getInstance()
+                            .getCurrentUser()
+                            .getUid();
+
+            HashMap<String, Object> datos =
+                    new HashMap<>();
+
+            datos.put(
+                    "metaAgua",
+                    aguaSeleccionada
+            );
+
+            datos.put(
+                    "cocasDiarias",
+                    cocaSeleccionada
+            );
+
+            FirebaseDatabase.getInstance()
+                    .getReference()
+                    .child("usuarios")
+                    .child(uid)
+                    .updateChildren(datos)
+                    .addOnSuccessListener(unused -> {
+
+                        Toast.makeText(
+                                ConfiguracionInicialActivity.this,
+                                "Configuración guardada",
+                                Toast.LENGTH_SHORT
+                        ).show();
+
+                        Intent intent =
+                                new Intent(
+                                        ConfiguracionInicialActivity.this,
+                                        MainActivity.class
+                                );
+
+                        startActivity(intent);
+                        finish();
+
+                    })
+                    .addOnFailureListener(e -> {
+
+                        Toast.makeText(
+                                ConfiguracionInicialActivity.this,
+                                "Error al guardar configuración",
+                                Toast.LENGTH_LONG
+                        ).show();
+
+                    });
         });
 
     }

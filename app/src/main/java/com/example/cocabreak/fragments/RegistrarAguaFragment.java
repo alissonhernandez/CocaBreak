@@ -13,6 +13,10 @@ import androidx.fragment.app.Fragment;
 import com.example.cocabreak.R;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
 
 public class RegistrarAguaFragment extends Fragment {
 
@@ -21,6 +25,7 @@ public class RegistrarAguaFragment extends Fragment {
     private TextView tvVaso, tvBotella;
 
     private int cantidadSeleccionada = 0;
+    private String tipoSeleccionado = "";
 
     public RegistrarAguaFragment() {
         super(R.layout.fragment_registrar_agua);
@@ -47,11 +52,15 @@ public class RegistrarAguaFragment extends Fragment {
                         .popBackStack()
         );
 
-        cardVaso.setOnClickListener(v ->
-                seleccionar(cardVaso, 250));
+        cardVaso.setOnClickListener(v -> {
+            seleccionar(cardVaso, 250);
+            tipoSeleccionado = "Vaso";
+        });
 
-        cardBotella.setOnClickListener(v ->
-                seleccionar(cardBotella, 680));
+        cardBotella.setOnClickListener(v -> {
+            seleccionar(cardBotella, 680);
+            tipoSeleccionado = "Botella";
+        });
 
         btnRegistrar.setOnClickListener(v -> {
 
@@ -66,12 +75,34 @@ public class RegistrarAguaFragment extends Fragment {
                 return;
             }
 
-            Toast.makeText(
-                    getContext(),
-                    "Agua registrada: "
-                            + cantidadSeleccionada + " ml",
-                    Toast.LENGTH_SHORT
-            ).show();
+            String uid =
+                    FirebaseAuth.getInstance()
+                            .getCurrentUser()
+                            .getUid();
+
+            HashMap<String, Object> registro =
+                    new HashMap<>();
+
+            registro.put("cantidad", cantidadSeleccionada);
+            registro.put("tipo", tipoSeleccionado);
+            registro.put("fecha", System.currentTimeMillis());
+
+            FirebaseDatabase.getInstance()
+                    .getReference()
+                    .child("usuarios")
+                    .child(uid)
+                    .child("registrosAgua")
+                    .push()
+                    .setValue(registro)
+                    .addOnSuccessListener(unused -> {
+
+                        Toast.makeText(
+                                getContext(),
+                                "Agua registrada",
+                                Toast.LENGTH_SHORT
+                        ).show();
+
+                    });
         });
     }
 
@@ -92,8 +123,8 @@ public class RegistrarAguaFragment extends Fragment {
 
         if (seleccionada == cardVaso){
             tvVaso.setTextColor(Color.parseColor("#1E88F5"));
-        }else {
-            tvBotella.setTextColor(Color.parseColor("#1E88E5"));
+        }else{
+            tvBotella.setTextColor(Color.parseColor("#1E88F5"));
         }
 
         cantidadSeleccionada = cantidad;
@@ -110,7 +141,9 @@ public class RegistrarAguaFragment extends Fragment {
 
             if (card == null) continue;
 
-            card.setCardBackgroundColor(Color.parseColor("#DCEEFF"));
+            card.setCardBackgroundColor(
+                    Color.parseColor("#DCEEFF")
+            );
 
             card.setStrokeWidth(1);
 

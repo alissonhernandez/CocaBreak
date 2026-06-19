@@ -73,16 +73,22 @@
                             android:textStyle="bold"
                             android:textSize="15sp" />
 
-                        <TextView
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_below="@id/lblCoca"
-                            android:layout_marginTop="8dp"
-                            android:text="2"
-                            android:textColor="@color/text_main"
-                            android:textSize="36sp"
-                            android:textStyle="bold" />
+                            android:layout_marginTop="14dp">
 
+                            <TextView
+                                android:id="@+id/txtCocaHoy"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:textColor="@color/text_main"
+                                android:textSize="28sp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
                         <ImageView
                             android:layout_width="24dp"
                             android:layout_height="50dp"
@@ -123,9 +129,10 @@
                             android:baselineAligned="false">
 
                             <TextView
+                                android:id="@+id/txtAguaHoy"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="1L"
+                                android:text="0L"
                                 android:textColor="@color/text_main"
                                 android:textSize="28sp"
                                 android:textStyle="bold" />
@@ -133,7 +140,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="/2L"
+                                android:text=""
                                 android:textColor="@color/text_muted"
                                 android:textSize="14sp"
                                 android:layout_gravity="bottom"
