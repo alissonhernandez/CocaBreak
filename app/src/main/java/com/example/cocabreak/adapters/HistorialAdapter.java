@@ -1,5 +1,6 @@
 package com.example.cocabreak.adapters;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,11 +12,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cocabreak.R;
 import com.example.cocabreak.models.Historial;
+import com.google.android.material.card.MaterialCardView;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Calendar;
 
 public class HistorialAdapter
         extends RecyclerView.Adapter<HistorialAdapter.ViewHolder> {
@@ -49,14 +52,71 @@ public class HistorialAdapter
             int position) {
 
         Historial historial = lista.get(position);
+        String grupoFecha =
+                obtenerGrupoFecha(
+                        historial.getFecha()
+                );
+
+        if (position == 0) {
+
+            holder.txtGrupoFecha.setVisibility(
+                    View.VISIBLE
+            );
+
+            holder.txtGrupoFecha.setText(
+                    grupoFecha
+            );
+
+        } else {
+
+            String grupoAnterior =
+                    obtenerGrupoFecha(
+                            lista.get(position - 1)
+                                    .getFecha()
+                    );
+
+            if (grupoFecha.equals(grupoAnterior)) {
+
+                holder.txtGrupoFecha.setVisibility(
+                        View.GONE
+                );
+
+            } else {
+
+                holder.txtGrupoFecha.setVisibility(
+                        View.VISIBLE
+                );
+
+                holder.txtGrupoFecha.setText(
+                        grupoFecha
+                );
+            }
+        }
 
         holder.txtNombre.setText(
                 historial.getNombre()
         );
 
-        holder.txtTipo.setText(
-                historial.getTipo()
-        );
+        if ("Agua".equals(historial.getTipo())) {
+
+            holder.txtTipo.setText(
+                    " Agua"
+            );
+
+            holder.cardHistorial.setCardBackgroundColor(
+                    Color.parseColor("#E3F2FD")
+            );
+
+        } else {
+
+            holder.txtTipo.setText(
+                    "Coca-Cola"
+            );
+
+            holder.cardHistorial.setCardBackgroundColor(
+                    Color.parseColor("#FFEBEE")
+            );
+        }
 
         String fecha =
                 new SimpleDateFormat(
@@ -73,7 +133,6 @@ public class HistorialAdapter
                         ? ""
                         : historial.getNombre();
 
-        // COCA-COLA
         if (nombre.contains("Mini")) {
 
             holder.imgProducto.setImageResource(
@@ -89,7 +148,7 @@ public class HistorialAdapter
         } else if (nombre.contains("Vidrio")) {
 
             holder.imgProducto.setImageResource(
-                    R.drawable.cocacola
+                    R.drawable.vidrio
             );
 
         } else if (nombre.contains("1.5")) {
@@ -110,10 +169,7 @@ public class HistorialAdapter
                     R.drawable.botella30
             );
 
-        }
-
-        // AGUA
-        else if (nombre.contains("Vaso")) {
+        } else if (nombre.contains("Vaso")) {
 
             holder.imgProducto.setImageResource(
                     R.drawable.vaso
@@ -125,10 +181,7 @@ public class HistorialAdapter
                     R.drawable.botella_agua
             );
 
-        }
-
-        // DEFAULT
-        else {
+        } else {
 
             holder.imgProducto.setImageResource(
                     R.drawable.botella_agua
@@ -144,13 +197,19 @@ public class HistorialAdapter
     public static class ViewHolder
             extends RecyclerView.ViewHolder {
 
+        MaterialCardView cardHistorial;
         ImageView imgProducto;
         TextView txtNombre;
         TextView txtTipo;
         TextView txtFecha;
-
+        TextView txtGrupoFecha;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+
+            cardHistorial =
+                    itemView.findViewById(
+                            R.id.cardHistorial
+                    );
 
             imgProducto =
                     itemView.findViewById(
@@ -171,6 +230,53 @@ public class HistorialAdapter
                     itemView.findViewById(
                             R.id.txtFecha
                     );
+            txtGrupoFecha =
+                    itemView.findViewById(
+                            R.id.txtGrupoFecha
+                    );
         }
+    }
+    private String obtenerGrupoFecha(
+            long fechaMillis) {
+
+        Calendar hoy =
+                Calendar.getInstance();
+
+        Calendar fecha =
+                Calendar.getInstance();
+
+        fecha.setTimeInMillis(
+                fechaMillis
+        );
+
+        if (hoy.get(Calendar.YEAR)
+                == fecha.get(Calendar.YEAR)
+                &&
+                hoy.get(Calendar.DAY_OF_YEAR)
+                        == fecha.get(Calendar.DAY_OF_YEAR)) {
+
+            return "Hoy";
+        }
+
+        hoy.add(
+                Calendar.DAY_OF_YEAR,
+                -1
+        );
+
+        if (hoy.get(Calendar.YEAR)
+                == fecha.get(Calendar.YEAR)
+                &&
+                hoy.get(Calendar.DAY_OF_YEAR)
+                        == fecha.get(Calendar.DAY_OF_YEAR)) {
+
+            return "Ayer";
+        }
+
+        return new SimpleDateFormat(
+                "dd/MM/yyyy",
+                Locale.getDefault()
+        ).format(
+                new Date(fechaMillis)
+        );
     }
 }

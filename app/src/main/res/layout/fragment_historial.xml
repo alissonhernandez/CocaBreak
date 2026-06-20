@@ -21,6 +21,42 @@
         android:text="Consulta tu historial de consumo"
         android:textColor="#666666"
         android:textSize="14sp" />
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:cardCornerRadius="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Resumen General"
+                android:textStyle="bold"
+                android:textSize="18sp"/>
+
+            <TextView
+                android:id="@+id/txtResumenCoca"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text=" Coca-Cola: 0 consumos"/>
+
+            <TextView
+                android:id="@+id/txtResumenAgua"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text=" Agua: 0 consumos"/>
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
 
     <HorizontalScrollView
         android:layout_width="match_parent"

@@ -5,17 +5,21 @@ public class Historial {
     private String nombre;
     private String tipo;
     private long fecha;
+    private int cantidad;
 
     public Historial() {
     }
 
-    public Historial(String nombre,
-                     String tipo,
-                     long fecha) {
+    public Historial(
+            String nombre,
+            String tipo,
+            long fecha,
+            int cantidad) {
 
         this.nombre = nombre;
         this.tipo = tipo;
         this.fecha = fecha;
+        this.cantidad = cantidad;
     }
 
     public String getNombre() {
@@ -28,5 +32,9 @@ public class Historial {
 
     public long getFecha() {
         return fecha;
+    }
+
+    public int getCantidad() {
+        return cantidad;
     }
 }

@@ -2,6 +2,7 @@ package com.example.cocabreak.fragments;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +19,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class HistorialFragment extends Fragment {
@@ -27,6 +29,9 @@ public class HistorialFragment extends Fragment {
     private MaterialButton btnTodos;
     private MaterialButton btnCoca;
     private MaterialButton btnAgua;
+
+    private TextView txtResumenCoca;
+    private TextView txtResumenAgua;
 
     private HistorialAdapter adapter;
 
@@ -58,6 +63,12 @@ public class HistorialFragment extends Fragment {
 
         btnAgua =
                 view.findViewById(R.id.btnAgua);
+
+        txtResumenCoca =
+                view.findViewById(R.id.txtResumenCoca);
+
+        txtResumenAgua =
+                view.findViewById(R.id.txtResumenAgua);
 
         rvHistorial.setLayoutManager(
                 new LinearLayoutManager(getContext())
@@ -104,6 +115,10 @@ public class HistorialFragment extends Fragment {
                                 dato.child("nombre")
                                         .getValue(String.class);
 
+                        Integer cantidad =
+                                dato.child("cantidad")
+                                        .getValue(Integer.class);
+
                         Long fecha =
                                 dato.child("fecha")
                                         .getValue(Long.class);
@@ -112,9 +127,8 @@ public class HistorialFragment extends Fragment {
                                 new Historial(
                                         nombre,
                                         "Coca-Cola",
-                                        fecha != null
-                                                ? fecha
-                                                : 0
+                                        fecha != null ? fecha : 0,
+                                        cantidad != null ? cantidad : 0
                                 )
                         );
                     }
@@ -146,31 +160,39 @@ public class HistorialFragment extends Fragment {
                             cantidad =
                                     ((Long) cantidadObj)
                                             .intValue();
-                        }
-
-                        String nombre;
-
-                        if (cantidad == 250) {
-                            nombre = "Vaso 250 ml";
-                        } else {
-                            nombre = "Botella 680 ml";
+                        } else if (cantidadObj instanceof Integer) {
+                            cantidad =
+                                    (Integer) cantidadObj;
                         }
 
                         Long fecha =
                                 dato.child("fecha")
                                         .getValue(Long.class);
 
+                        String nombre =
+                                cantidad == 250
+                                        ? "Vaso 250 ml"
+                                        : "Botella 680 ml";
+
                         listaCompleta.add(
                                 new Historial(
                                         nombre,
                                         "Agua",
-                                        fecha != null
-                                                ? fecha
-                                                : 0
+                                        fecha != null ? fecha : 0,
+                                        cantidad
                                 )
                         );
                     }
 
+                    Collections.sort(
+                            listaCompleta,
+                            (h1, h2) -> Long.compare(
+                                    h2.getFecha(),
+                                    h1.getFecha()
+                            )
+                    );
+
+                    actualizarResumen();
                     mostrarTodos();
                 });
     }
@@ -178,10 +200,7 @@ public class HistorialFragment extends Fragment {
     private void mostrarTodos() {
 
         listaMostrar.clear();
-
-        listaMostrar.addAll(
-                listaCompleta
-        );
+        listaMostrar.addAll(listaCompleta);
 
         adapter.notifyDataSetChanged();
     }
@@ -218,5 +237,54 @@ public class HistorialFragment extends Fragment {
         }
 
         adapter.notifyDataSetChanged();
+    }
+
+    private void actualizarResumen() {
+
+        int coca = 0;
+        int agua = 0;
+
+        int mlCoca = 0;
+        int mlAgua = 0;
+
+        for (Historial item :
+                listaCompleta) {
+
+            if ("Coca-Cola".equals(
+                    item.getTipo())) {
+
+                coca++;
+                mlCoca += item.getCantidad();
+            }
+
+            if ("Agua".equals(
+                    item.getTipo())) {
+
+                agua++;
+                mlAgua += item.getCantidad();
+            }
+        }
+
+        double litrosCoca =
+                mlCoca / 1000.0;
+
+        double litrosAgua =
+                mlAgua / 1000.0;
+
+        txtResumenCoca.setText(
+                "Coca-Cola: "
+                        + coca
+                        + " consumos ("
+                        + String.format("%.1f", litrosCoca)
+                        + " L)"
+        );
+
+        txtResumenAgua.setText(
+                " Agua: "
+                        + agua
+                        + " consumos ("
+                        + String.format("%.1f", litrosAgua)
+                        + " L)"
+        );
     }
 }
