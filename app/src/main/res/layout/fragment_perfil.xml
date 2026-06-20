@@ -218,6 +218,19 @@
                         android:paddingHorizontal="16dp"
                         android:text="Mi información"
                         android:textStyle="bold"/>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#EEEEEE"/>
+
+                    <TextView
+                        android:id="@+id/btnHistorial"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:gravity="center_vertical"
+                        android:paddingHorizontal="16dp"
+                        android:text="Historial de consumo"
+                        android:textStyle="bold"/>
 
                     <View
                         android:layout_width="match_parent"

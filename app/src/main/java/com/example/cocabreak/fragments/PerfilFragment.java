@@ -33,8 +33,11 @@ public class PerfilFragment extends Fragment {
         TextView txtNombreUsuario =
                 view.findViewById(R.id.txtNombreUsuario);
 
+
         TextView btnMiInformacion =
                 view.findViewById(R.id.btnMiInformacion);
+        TextView btnHistorial =
+                view.findViewById(R.id.btnHistorial);
 
         TextView btnCerrarSesion =
                 view.findViewById(R.id.btnCerrarSesion);
@@ -86,6 +89,18 @@ public class PerfilFragment extends Fragment {
                         .replace(
                                 R.id.fragmentContainer,
                                 new EditarPerfilFragment()
+                        )
+                        .addToBackStack(null)
+                        .commit()
+        );
+        btnHistorial.setOnClickListener(v ->
+
+                requireActivity()
+                        .getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(
+                                R.id.fragmentContainer,
+                                new HistorialFragment()
                         )
                         .addToBackStack(null)
                         .commit()
