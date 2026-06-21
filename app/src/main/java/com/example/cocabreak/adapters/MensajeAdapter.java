@@ -17,8 +17,7 @@ import com.google.android.material.card.MaterialCardView;
 
 import java.util.List;
 
-public class MensajeAdapter
-        extends RecyclerView.Adapter<MensajeAdapter.ViewHolder> {
+public class MensajeAdapter extends RecyclerView.Adapter<MensajeAdapter.ViewHolder> {
 
     private final List<Mensaje> mensajes;
 
@@ -28,58 +27,43 @@ public class MensajeAdapter
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(
-            @NonNull ViewGroup parent,
-            int viewType) {
-
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(
-                        R.layout.item_mensaje,
-                        parent,
-                        false
-                );
-
+                .inflate(R.layout.item_mensaje, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(
-            @NonNull ViewHolder holder,
-            int position) {
-
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Mensaje mensaje = mensajes.get(position);
 
-        holder.txtMensaje.setText(
-                mensaje.getTexto()
-        );
+        holder.txtMensaje.setText(mensaje.getTexto());
+        holder.txtHora.setText(mensaje.getHora());
 
         FrameLayout.LayoutParams params =
-                (FrameLayout.LayoutParams)
-                        holder.cardMensaje.getLayoutParams();
+                (FrameLayout.LayoutParams) holder.cardMensaje.getLayoutParams();
+
 
         if (mensaje.isEnviadoPorMi()) {
-
             params.gravity = Gravity.END;
 
-            holder.cardMensaje.setCardBackgroundColor(
-                    Color.parseColor("#F44336")
-            );
 
-            holder.txtMensaje.setTextColor(
-                    Color.WHITE
-            );
+            holder.txtNombre.setVisibility(View.GONE);
 
+            holder.cardMensaje.setCardBackgroundColor(Color.parseColor("#F44336"));
+            holder.txtMensaje.setTextColor(Color.WHITE);
+            holder.txtHora.setTextColor(Color.parseColor("#E0E0E0"));
         } else {
-
             params.gravity = Gravity.START;
 
-            holder.cardMensaje.setCardBackgroundColor(
-                    Color.parseColor("#EEEEEE")
-            );
 
-            holder.txtMensaje.setTextColor(
-                    Color.BLACK
-            );
+            holder.txtNombre.setVisibility(View.VISIBLE);
+            holder.txtNombre.setText(mensaje.getNombre());
+
+            holder.cardMensaje.setCardBackgroundColor(Color.parseColor("#EEEEEE"));
+            holder.txtMensaje.setTextColor(Color.BLACK);
+            holder.txtNombre.setTextColor(Color.BLACK);
+            holder.txtHora.setTextColor(Color.DKGRAY);
         }
 
         holder.cardMensaje.setLayoutParams(params);
@@ -90,20 +74,20 @@ public class MensajeAdapter
         return mensajes.size();
     }
 
-    static class ViewHolder
-            extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
 
         MaterialCardView cardMensaje;
         TextView txtMensaje;
+        TextView txtNombre;
+        TextView txtHora;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            cardMensaje =
-                    itemView.findViewById(R.id.cardMensaje);
-
-            txtMensaje =
-                    itemView.findViewById(R.id.txtMensaje);
+            cardMensaje = itemView.findViewById(R.id.cardMensaje);
+            txtNombre = itemView.findViewById(R.id.txtNombre);
+            txtMensaje = itemView.findViewById(R.id.txtMensaje);
+            txtHora = itemView.findViewById(R.id.txtHora);
         }
     }
 }

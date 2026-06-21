@@ -20,20 +20,27 @@ public class HomeFragment extends Fragment {
 
     private TextView txtCocaHoy;
     private TextView txtAguaHoy;
+    private TextView txtAzucar;
+    private TextView txtCalorias;
+    private TextView txtDinero;
+    private TextView txtMisGrupos;
+    private TextView txtMensajes;
 
     public HomeFragment() {
         super(R.layout.fragment_home);
     }
 
     @Override
-    public void onViewCreated(
-            @NonNull View view,
-            @Nullable Bundle savedInstanceState) {
-
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         txtCocaHoy = view.findViewById(R.id.txtCocaHoy);
         txtAguaHoy = view.findViewById(R.id.txtAguaHoy);
+        txtAzucar = view.findViewById(R.id.txtAzucar);
+        txtCalorias = view.findViewById(R.id.txtCalorias);
+        txtDinero = view.findViewById(R.id.txtDinero);
+        txtMisGrupos = view.findViewById(R.id.txtMisGrupos);
+        txtMensajes = view.findViewById(R.id.txtMensajes);
 
         cargarResumen();
 
@@ -43,33 +50,30 @@ public class HomeFragment extends Fragment {
         MaterialCardView cardChat = view.findViewById(R.id.cardChat);
 
         if (cardReto != null) {
-            cardReto.setOnClickListener(v ->
-                    abrirFragment(new RetosFragment()));
+            cardReto.setOnClickListener(v -> abrirFragment(new RetosFragment()));
         }
 
         if (cardLogro != null) {
-            cardLogro.setOnClickListener(v ->
-                    abrirFragment(new LogrosFragment()));
+            cardLogro.setOnClickListener(v -> abrirFragment(new LogrosFragment()));
         }
 
         if (cardGrupo != null) {
-            cardGrupo.setOnClickListener(v ->
-                    abrirFragment(new GrupoFragment()));
+            cardGrupo.setOnClickListener(v -> abrirFragment(new GrupoFragment()));
         }
 
         if (cardChat != null) {
-            cardChat.setOnClickListener(v ->
-                    abrirFragment(new ChatFragment()));
+            cardChat.setOnClickListener(v -> abrirFragment(new ChatFragment()));
         }
     }
 
     private void cargarResumen() {
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+            return;
+        }
 
-        String uid = FirebaseAuth.getInstance()
-                .getCurrentUser()
-                .getUid();
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        // COCA-COLA
+
         FirebaseDatabase.getInstance()
                 .getReference()
                 .child("usuarios")
@@ -79,30 +83,31 @@ public class HomeFragment extends Fragment {
                 .addOnSuccessListener(snapshot -> {
 
                     int totalMl = 0;
+                    long ahora = System.currentTimeMillis();
+                    long inicioHoy = ahora - (ahora % 86400000);
 
                     for (DataSnapshot dato : snapshot.getChildren()) {
+                        Integer cantidad = dato.child("cantidad").getValue(Integer.class);
+                        Long fecha = dato.child("fecha").getValue(Long.class);
 
-                        Integer cantidad =
-                                dato.child("cantidad")
-                                        .getValue(Integer.class);
-
-                        if (cantidad != null) {
+                        if (cantidad != null && fecha != null && fecha >= inicioHoy) {
                             totalMl += cantidad;
                         }
                     }
 
+
+                    double azucar = totalMl * 0.106;
+                    double calorias = totalMl * 0.42;
+                    double dinero = totalMl * 0.0015;
                     double litros = totalMl / 1000.0;
 
-                    txtCocaHoy.setText(
-                            String.format(
-                                    Locale.getDefault(),
-                                    "%.1fL",
-                                    litros
-                            )
-                    );
+                    txtAzucar.setText(String.format(Locale.getDefault(), "%.0fg", azucar));
+                    txtCalorias.setText(String.format(Locale.getDefault(), "%.0f kcal", calorias));
+                    txtDinero.setText(String.format(Locale.getDefault(), "$%.2f", dinero));
+                    txtCocaHoy.setText(String.format(Locale.getDefault(), "%.1fL", litros));
                 });
 
-        // AGUA
+
         FirebaseDatabase.getInstance()
                 .getReference()
                 .child("usuarios")
@@ -112,39 +117,46 @@ public class HomeFragment extends Fragment {
                 .addOnSuccessListener(snapshot -> {
 
                     int totalMl = 0;
+                    long ahora = System.currentTimeMillis();
+                    long inicioHoy = ahora - (ahora % 86400000);
 
                     for (DataSnapshot dato : snapshot.getChildren()) {
+                        Integer cantidad = dato.child("cantidad").getValue(Integer.class);
+                        Long fecha = dato.child("fecha").getValue(Long.class);
 
-                        Integer cantidad =
-                                dato.child("cantidad")
-                                        .getValue(Integer.class);
-
-                        if (cantidad != null) {
+                        if (cantidad != null && fecha != null && fecha >= inicioHoy) {
                             totalMl += cantidad;
                         }
                     }
 
                     double litros = totalMl / 1000.0;
+                    txtAguaHoy.setText(String.format(Locale.getDefault(), "%.1fL", litros));
+                });
 
-                    txtAguaHoy.setText(
-                            String.format(
-                                    Locale.getDefault(),
-                                    "%.1fL",
-                                    litros
-                            )
-                    );
+
+        FirebaseDatabase.getInstance()
+                .getReference("grupos")
+                .get()
+                .addOnSuccessListener(snapshot -> {
+                    int cantidad = (int) snapshot.getChildrenCount();
+                    txtMisGrupos.setText(cantidad + " grupos activos");
+                });
+
+
+        FirebaseDatabase.getInstance()
+                .getReference("chatGeneral")
+                .get()
+                .addOnSuccessListener(snapshot -> {
+                    int cantidadMensajes = (int) snapshot.getChildrenCount();
+                    txtMensajes.setText(cantidadMensajes + " mensajes nuevos");
                 });
     }
 
     private void abrirFragment(Fragment fragment) {
-
         requireActivity()
                 .getSupportFragmentManager()
                 .beginTransaction()
-                .replace(
-                        R.id.fragmentContainer,
-                        fragment
-                )
+                .replace(R.id.fragmentContainer, fragment)
                 .addToBackStack(null)
                 .commit();
     }

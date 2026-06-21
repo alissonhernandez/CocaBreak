@@ -50,6 +50,14 @@ public class PerfilFragment extends Fragment {
 
         TextView btnCerrarSesion =
                 view.findViewById(R.id.btnCerrarSesion);
+        TextView tvAguaConsumida =
+                view.findViewById(R.id.tvAguaConsumida);
+
+        TextView tvCocaEvitada =
+                view.findViewById(R.id.tvCocaEvitada);
+
+        TextView tvRachaActual =
+                view.findViewById(R.id.tvRachaActual);
 
         FirebaseAuth auth =
                 FirebaseAuth.getInstance();
@@ -83,6 +91,56 @@ public class PerfilFragment extends Fragment {
 
                                         txtNombreUsuario.setText(
                                                 "Hola, " + nombre
+                                        );
+                                        long totalAgua = 0;
+                                        long totalCoca = 0;
+
+                                        if (snapshot.child("registrosAgua").exists()) {
+
+                                            for (DataSnapshot agua :
+                                                    snapshot.child("registrosAgua").getChildren()) {
+
+                                                Long cantidad =
+                                                        agua.child("cantidad")
+                                                                .getValue(Long.class);
+
+                                                if (cantidad != null) {
+                                                    totalAgua += cantidad;
+                                                }
+                                            }
+                                        }
+
+                                        if (snapshot.child("registrosCoca").exists()) {
+
+                                            for (DataSnapshot coca :
+                                                    snapshot.child("registrosCoca").getChildren()) {
+
+                                                Long cantidad =
+                                                        coca.child("cantidad")
+                                                                .getValue(Long.class);
+
+                                                if (cantidad != null) {
+                                                    totalCoca += cantidad;
+                                                }
+                                            }
+                                        }
+
+                                        tvAguaConsumida.setText(
+                                                totalAgua + " ml"
+                                        );
+
+                                        tvCocaEvitada.setText(
+                                                String.valueOf(totalCoca)
+                                        );
+
+                                        long racha = 0;
+
+                                        if (totalAgua > totalCoca) {
+                                            racha = 1;
+                                        }
+
+                                        tvRachaActual.setText(
+                                                racha + " días"
                                         );
                                     }
 

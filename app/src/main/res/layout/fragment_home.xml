@@ -254,19 +254,27 @@
                     <TableRow android:layout_marginBottom="16dp" android:gravity="center_vertical">
                         <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/ic_sugar" app:tint="@color/text_muted"/>
                         <TextView android:text="Azúcar consumida" android:paddingStart="12dp" android:textColor="@color/text_main" android:textStyle="bold" android:textSize="15sp"/>
-                        <TextView android:text="52g" android:gravity="end" android:textColor="@color/text_main" android:textStyle="bold" android:textSize="15sp"/>
+                        <TextView
+                            android:id="@+id/txtAzucar"
+                            android:text="0g"
+                            android:gravity="end" android:textColor="@color/text_main" android:textStyle="bold" android:textSize="15sp"/>
                     </TableRow>
 
                     <TableRow android:layout_marginBottom="16dp" android:gravity="center_vertical">
                         <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/ic_calories" app:tint="@color/text_muted"/>
                         <TextView android:text="Calorías" android:paddingStart="12dp" android:textColor="@color/text_main" android:textStyle="bold" android:textSize="15sp"/>
-                        <TextView android:text="210 kcal" android:gravity="end" android:textColor="@color/text_main" android:textStyle="bold" android:textSize="15sp"/>
+                        <TextView
+                            android:id="@+id/txtCalorias"
+                            android:text="0 kcal"  android:gravity="end" android:textColor="@color/text_main" android:textStyle="bold" android:textSize="15sp"/>
                     </TableRow>
 
                     <TableRow android:gravity="center_vertical">
                         <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/ic_money" app:tint="@color/text_muted"/>
                         <TextView android:text="Dinero gastado" android:paddingStart="12dp" android:textColor="@color/text_main" android:textStyle="bold" android:textSize="15sp"/>
-                        <TextView android:text="$18.00" android:gravity="end" android:textColor="@color/text_main" android:textStyle="bold" android:textSize="15sp"/>
+                        <TextView
+                            android:id="@+id/txtDinero"
+                            android:text="$0.00"
+                            android:gravity="end" android:textColor="@color/text_main" android:textStyle="bold" android:textSize="15sp"/>
                     </TableRow>
                 </TableLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -377,9 +385,12 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="2 grupos activos"
+                            android:id="@+id/txtMisGrupos"
+                            android:text="0 grupos activos"
                             android:textColor="@color/text_muted"
                             android:textSize="13sp" />
+
+
                     </LinearLayout>
 
                     <TextView
@@ -432,9 +443,11 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="3 mensajes nuevos"
+                            android:id="@+id/txtMensajes"
+                            android:text="0 mensajes nuevos"
                             android:textColor="@color/text_muted"
                             android:textSize="13sp" />
+
                     </LinearLayout>
 
                     <TextView
