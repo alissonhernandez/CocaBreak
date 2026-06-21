@@ -8,6 +8,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import android.net.Uri;
+import android.widget.ImageView;
 
 import com.example.cocabreak.R;
 import com.example.cocabreak.activities.LoginActivity;
@@ -16,6 +18,10 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+
+
+
 
 public class PerfilFragment extends Fragment {
 
@@ -26,59 +32,96 @@ public class PerfilFragment extends Fragment {
     @Override
     public void onViewCreated(
             @NonNull View view,
-            @Nullable Bundle savedInstanceState) {
-
+            @Nullable Bundle savedInstanceState
+    ) {
         super.onViewCreated(view, savedInstanceState);
 
         TextView txtNombreUsuario =
                 view.findViewById(R.id.txtNombreUsuario);
 
+        ImageView imgPerfil=
+                view.findViewById(R.id.imgPerfil);
 
         TextView btnMiInformacion =
                 view.findViewById(R.id.btnMiInformacion);
+
         TextView btnHistorial =
                 view.findViewById(R.id.btnHistorial);
 
         TextView btnCerrarSesion =
                 view.findViewById(R.id.btnCerrarSesion);
 
-        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseAuth auth =
+                FirebaseAuth.getInstance();
 
         if (auth.getCurrentUser() != null) {
 
-            String uid = auth.getCurrentUser().getUid();
+            String uid =
+                    auth.getCurrentUser().getUid();
 
             FirebaseDatabase.getInstance()
                     .getReference()
                     .child("usuarios")
                     .child(uid)
-                    .child("nombre")
                     .addListenerForSingleValueEvent(
                             new ValueEventListener() {
 
                                 @Override
                                 public void onDataChange(
-                                        @NonNull DataSnapshot snapshot) {
+                                        @NonNull DataSnapshot snapshot
+                                ) {
 
-                                    if (snapshot.exists()) {
+                                    if (!snapshot.exists()) {
+                                        return;
+                                    }
 
-                                        String nombre =
-                                                snapshot.getValue(
-                                                        String.class
-                                                );
+                                    String nombre =
+                                            snapshot.child("nombre")
+                                                    .getValue(String.class);
+
+                                    if (nombre != null) {
 
                                         txtNombreUsuario.setText(
                                                 "Hola, " + nombre
+                                        );
+                                    }
+
+                                    String foto =
+                                            snapshot.child("fotoPerfil")
+                                                    .getValue(String.class);
+
+                                    if (foto != null &&
+                                            !foto.isEmpty()) {
+
+                                        try {
+
+                                            imgPerfil.setImageURI(
+                                                    Uri.parse(foto)
+                                            );
+
+                                        } catch (Exception e) {
+
+                                            imgPerfil.setImageResource(
+                                                    R.drawable.ic_person
+                                            );
+                                        }
+
+                                    } else {
+
+                                        imgPerfil.setImageResource(
+                                                R.drawable.ic_person
                                         );
                                     }
                                 }
 
                                 @Override
                                 public void onCancelled(
-                                        @NonNull DatabaseError error) {
+                                        @NonNull DatabaseError error
+                                ) {
 
                                 }
-                            });
+                            }
+                    );
         }
 
         btnMiInformacion.setOnClickListener(v ->
@@ -93,6 +136,7 @@ public class PerfilFragment extends Fragment {
                         .addToBackStack(null)
                         .commit()
         );
+
         btnHistorial.setOnClickListener(v ->
 
                 requireActivity()
@@ -110,10 +154,11 @@ public class PerfilFragment extends Fragment {
 
             FirebaseAuth.getInstance().signOut();
 
-            Intent intent = new Intent(
-                    requireActivity(),
-                    LoginActivity.class
-            );
+            Intent intent =
+                    new Intent(
+                            requireActivity(),
+                            LoginActivity.class
+                    );
 
             intent.setFlags(
                     Intent.FLAG_ACTIVITY_NEW_TASK
