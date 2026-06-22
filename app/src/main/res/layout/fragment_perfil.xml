@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -133,7 +132,7 @@
                                 android:id="@+id/tvCocaEvitada"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="0"
+                                android:text="0 ml"
                                 android:textColor="#F44336"
                                 android:textStyle="bold" />
 
@@ -168,7 +167,7 @@
                                 android:id="@+id/tvRachaActual"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="0 días"
+                                android:text="En progreso"
                                 android:textColor="#FF9800"
                                 android:textStyle="bold" />
 

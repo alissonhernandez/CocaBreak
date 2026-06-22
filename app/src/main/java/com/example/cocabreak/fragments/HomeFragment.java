@@ -26,6 +26,12 @@ public class HomeFragment extends Fragment {
     private TextView txtMisGrupos;
     private TextView txtMensajes;
 
+
+    private TextView txtRetoActivo;
+    private TextView txtRetoProgreso;
+    private TextView txtLogroReciente;
+    private TextView txtDescripcionLogro;
+
     public HomeFragment() {
         super(R.layout.fragment_home);
     }
@@ -41,6 +47,12 @@ public class HomeFragment extends Fragment {
         txtDinero = view.findViewById(R.id.txtDinero);
         txtMisGrupos = view.findViewById(R.id.txtMisGrupos);
         txtMensajes = view.findViewById(R.id.txtMensajes);
+
+
+        txtRetoActivo = view.findViewById(R.id.txtRetoActivo);
+        txtRetoProgreso = view.findViewById(R.id.txtRetoProgreso);
+        txtLogroReciente = view.findViewById(R.id.txtLogroReciente);
+        txtDescripcionLogro = view.findViewById(R.id.txtDescripcionLogro);
 
         cargarResumen();
 
@@ -83,8 +95,16 @@ public class HomeFragment extends Fragment {
                 .addOnSuccessListener(snapshot -> {
 
                     int totalMl = 0;
-                    long ahora = System.currentTimeMillis();
-                    long inicioHoy = ahora - (ahora % 86400000);
+
+
+                    java.util.Calendar calendar = java.util.Calendar.getInstance();
+                    calendar.set(java.util.Calendar.HOUR_OF_DAY, 0);
+                    calendar.set(java.util.Calendar.MINUTE, 0);
+                    calendar.set(java.util.Calendar.SECOND, 0);
+                    calendar.set(java.util.Calendar.MILLISECOND, 0);
+                    long inicioHoy = calendar.getTimeInMillis();
+
+                    final int[] totalAguaReferencia = {0};
 
                     for (DataSnapshot dato : snapshot.getChildren()) {
                         Integer cantidad = dato.child("cantidad").getValue(Integer.class);
@@ -94,7 +114,6 @@ public class HomeFragment extends Fragment {
                             totalMl += cantidad;
                         }
                     }
-
 
                     double azucar = totalMl * 0.106;
                     double calorias = totalMl * 0.42;
@@ -105,32 +124,62 @@ public class HomeFragment extends Fragment {
                     txtCalorias.setText(String.format(Locale.getDefault(), "%.0f kcal", calorias));
                     txtDinero.setText(String.format(Locale.getDefault(), "$%.2f", dinero));
                     txtCocaHoy.setText(String.format(Locale.getDefault(), "%.1fL", litros));
-                });
+
+                    int finalTotalCocaMl = totalMl;
 
 
-        FirebaseDatabase.getInstance()
-                .getReference()
-                .child("usuarios")
-                .child(uid)
-                .child("registrosAgua")
-                .get()
-                .addOnSuccessListener(snapshot -> {
+                    FirebaseDatabase.getInstance()
+                            .getReference()
+                            .child("usuarios")
+                            .child(uid)
+                            .child("registrosAgua")
+                            .get()
+                            .addOnSuccessListener(snapshotAgua -> {
 
-                    int totalMl = 0;
-                    long ahora = System.currentTimeMillis();
-                    long inicioHoy = ahora - (ahora % 86400000);
+                                int totalAguaMl = 0;
+                                boolean tieneRegistrosAgua = snapshotAgua.hasChildren();
 
-                    for (DataSnapshot dato : snapshot.getChildren()) {
-                        Integer cantidad = dato.child("cantidad").getValue(Integer.class);
-                        Long fecha = dato.child("fecha").getValue(Long.class);
 
-                        if (cantidad != null && fecha != null && fecha >= inicioHoy) {
-                            totalMl += cantidad;
-                        }
-                    }
+                                java.util.Calendar calendarAgua = java.util.Calendar.getInstance();
+                                calendarAgua.set(java.util.Calendar.HOUR_OF_DAY, 0);
+                                calendarAgua.set(java.util.Calendar.MINUTE, 0);
+                                calendarAgua.set(java.util.Calendar.SECOND, 0);
+                                calendarAgua.set(java.util.Calendar.MILLISECOND, 0);
+                                long inicioHoyAgua = calendarAgua.getTimeInMillis();
 
-                    double litros = totalMl / 1000.0;
-                    txtAguaHoy.setText(String.format(Locale.getDefault(), "%.1fL", litros));
+                                for (DataSnapshot dato : snapshotAgua.getChildren()) {
+                                    Integer cantidad = dato.child("cantidad").getValue(Integer.class);
+                                    Long fecha = dato.child("fecha").getValue(Long.class);
+
+                                    if (cantidad != null && fecha != null && fecha >= inicioHoyAgua) {
+                                        totalAguaMl += cantidad;
+                                    }
+                                }
+
+                                double litrosAgua = totalAguaMl / 1000.0;
+                                txtAguaHoy.setText(String.format(Locale.getDefault(), "%.1fL", litrosAgua));
+
+
+                                if (totalAguaMl < 2000) {
+                                    txtRetoActivo.setText("Hidratación Básica");
+                                    txtRetoProgreso.setText(totalAguaMl + " / 2000 ml");
+                                } else {
+                                    txtRetoActivo.setText("Hidratación Básica");
+                                    txtRetoProgreso.setText("Completado");
+                                }
+
+
+                                if (totalAguaMl > finalTotalCocaMl) {
+                                    txtLogroReciente.setText("Cambio Inteligente");
+                                    txtDescripcionLogro.setText("Elegiste agua sobre Coca-Cola");
+                                } else if (totalAguaMl >= 2000) {
+                                    txtLogroReciente.setText("Hidratado");
+                                    txtDescripcionLogro.setText("Has alcanzado tu meta diaria");
+                                } else if (tieneRegistrosAgua || snapshot.hasChildren()) {
+                                    txtLogroReciente.setText("Primer Día");
+                                    txtDescripcionLogro.setText("Has comenzado tu cambio de hábitos");
+                                }
+                            });
                 });
 
 
@@ -139,7 +188,7 @@ public class HomeFragment extends Fragment {
                 .get()
                 .addOnSuccessListener(snapshot -> {
                     int cantidad = (int) snapshot.getChildrenCount();
-                    txtMisGrupos.setText(cantidad + " grupos activos");
+                    txtMisGrupos.setText(cantidad + " grupos disponibles");
                 });
 
 
@@ -148,7 +197,7 @@ public class HomeFragment extends Fragment {
                 .get()
                 .addOnSuccessListener(snapshot -> {
                     int cantidadMensajes = (int) snapshot.getChildrenCount();
-                    txtMensajes.setText(cantidadMensajes + " mensajes nuevos");
+                    txtMensajes.setText(cantidadMensajes + " mensajes");
                 });
     }
 
