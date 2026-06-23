@@ -7,11 +7,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import android.text.InputType;
+import android.widget.ImageView;
 
 import com.example.cocabreak.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,8 +27,12 @@ public class RegisterActivity extends AppCompatActivity {
     EditText etNombre, etCorreo, etPassword, etConfirmPassword;
     Button btnCrearCuenta;
     TextView tvIrLogin;
+    ImageView imgPassword, imgConfirmPassword;
 
     private FirebaseAuth mAuth;
+
+    private boolean passwordVisible = false;
+    private boolean confirmPasswordVisible = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +52,73 @@ public class RegisterActivity extends AppCompatActivity {
         etConfirmPassword = findViewById(R.id.etConfirmPassword);
         btnCrearCuenta = findViewById(R.id.btnCrearCuenta);
         tvIrLogin = findViewById(R.id.tvIrLogin);
+        imgPassword = findViewById(R.id.imgPassword);
+
+        imgConfirmPassword = findViewById(R.id.imgConfirmPassword);
+
+        imgPassword.setOnClickListener(v -> {
+
+            if (passwordVisible) {
+
+                etPassword.setInputType(
+                        InputType.TYPE_CLASS_TEXT |
+                                InputType.TYPE_TEXT_VARIATION_PASSWORD
+                );
+
+                imgPassword.setImageResource(
+                        R.drawable.ic_visibility_off
+                );
+
+            } else {
+
+                etPassword.setInputType(
+                        InputType.TYPE_CLASS_TEXT |
+                                InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+                );
+
+                imgPassword.setImageResource(
+                        R.drawable.ic_visibility
+                );
+            }
+
+            etPassword.setSelection(
+                    etPassword.getText().length()
+            );
+
+            passwordVisible = !passwordVisible;
+        });
+
+        imgConfirmPassword.setOnClickListener(v -> {
+
+            if (confirmPasswordVisible) {
+
+                etConfirmPassword.setInputType(
+                        InputType.TYPE_CLASS_TEXT |
+                                InputType.TYPE_TEXT_VARIATION_PASSWORD
+                );
+
+                imgConfirmPassword.setImageResource(
+                        R.drawable.ic_visibility_off
+                );
+
+            } else {
+
+                etConfirmPassword.setInputType(
+                        InputType.TYPE_CLASS_TEXT |
+                                InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+                );
+
+                imgConfirmPassword.setImageResource(
+                        R.drawable.ic_visibility
+                );
+            }
+
+            etConfirmPassword.setSelection(
+                    etConfirmPassword.getText().length()
+            );
+
+            confirmPasswordVisible = !confirmPasswordVisible;
+        });
 
         mAuth = FirebaseAuth.getInstance();
 
