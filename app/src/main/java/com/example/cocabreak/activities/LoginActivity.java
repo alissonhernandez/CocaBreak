@@ -6,6 +6,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.text.InputType;
+import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +25,8 @@ public class LoginActivity extends AppCompatActivity {
     private TextView tvRegistrarse;
     private TextView tvForgotPassword;
     private FirebaseAuth mAuth;
+
+    private boolean passwordVisible = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +47,41 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin = findViewById(R.id.btnLogin);
         tvRegistrarse = findViewById(R.id.tvRegistrarse);
         tvForgotPassword = findViewById(R.id.tvForgotPassword);
+
+        ImageView imgTogglePassword =
+                findViewById(R.id.imgTogglePassword);
+
+        imgTogglePassword.setOnClickListener(v -> {
+
+            if (passwordVisible) {
+
+                edPassword.setInputType(
+                        InputType.TYPE_CLASS_TEXT |
+                                InputType.TYPE_TEXT_VARIATION_PASSWORD
+                );
+
+                imgTogglePassword.setImageResource(
+                        R.drawable.ic_visibility_off
+                );
+
+            } else {
+
+                edPassword.setInputType(
+                        InputType.TYPE_CLASS_TEXT |
+                                InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+                );
+
+                imgTogglePassword.setImageResource(
+                        R.drawable.ic_visibility
+                );
+            }
+
+            edPassword.setSelection(
+                    edPassword.getText().length()
+            );
+
+            passwordVisible = !passwordVisible;
+        });
 
         btnLogin.setOnClickListener(v -> iniciarSesion());
 
