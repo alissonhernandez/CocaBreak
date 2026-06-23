@@ -1,15 +1,15 @@
 package com.example.cocabreak.fragments;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import android.net.Uri;
-import android.widget.ImageView;
 
 import com.example.cocabreak.R;
 import com.example.cocabreak.activities.LoginActivity;
@@ -19,6 +19,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Locale;
+
 public class PerfilFragment extends Fragment {
 
     public PerfilFragment() {
@@ -26,169 +32,110 @@ public class PerfilFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(
-            @NonNull View view,
-            @Nullable Bundle savedInstanceState
-    ) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         TextView txtNombreUsuario = view.findViewById(R.id.txtNombreUsuario);
-        ImageView imgPerfil = view.findViewById(R.id.imgPerfil);
+        ImageView imgPerfil       = view.findViewById(R.id.imgPerfil);
         TextView btnMiInformacion = view.findViewById(R.id.btnMiInformacion);
-        TextView btnHistorial = view.findViewById(R.id.btnHistorial);
-        TextView btnCerrarSesion = view.findViewById(R.id.btnCerrarSesion);
-        TextView tvAguaConsumida = view.findViewById(R.id.tvAguaConsumida);
-        TextView tvCocaEvitada = view.findViewById(R.id.tvCocaEvitada);
-        TextView tvRachaActual = view.findViewById(R.id.tvRachaActual);
+        TextView btnHistorial     = view.findViewById(R.id.btnHistorial);
+        TextView btnCerrarSesion  = view.findViewById(R.id.btnCerrarSesion);
+        TextView tvAguaConsumida  = view.findViewById(R.id.tvAguaConsumida);
+        TextView tvCocaEvitada    = view.findViewById(R.id.tvCocaEvitada);
+        TextView tvRachaActual    = view.findViewById(R.id.tvRachaActual);
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
 
         if (auth.getCurrentUser() != null) {
-
             String uid = auth.getCurrentUser().getUid();
 
             FirebaseDatabase.getInstance()
-                    .getReference()
-                    .child("usuarios")
+                    .getReference("usuarios")
                     .child(uid)
-                    .addListenerForSingleValueEvent(
-                            new ValueEventListener() {
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (!snapshot.exists()) return;
 
-                                @Override
-                                public void onDataChange(
-                                        @NonNull DataSnapshot snapshot
-                                ) {
+                            String nombre = snapshot.child("nombre").getValue(String.class);
+                            if (nombre != null) txtNombreUsuario.setText("Hola, " + nombre);
 
-                                    if (!snapshot.exists()) {
-                                        return;
-                                    }
-
-                                    String nombre =
-                                            snapshot.child("nombre")
-                                                    .getValue(String.class);
-
-                                    if (nombre != null) {
-
-                                        txtNombreUsuario.setText("Hola, " + nombre);
-                                        long totalAgua = 0;
-                                        long totalCoca = 0;
-
-                                        if (snapshot.child("registrosAgua").exists()) {
-                                            for (DataSnapshot agua :
-                                                    snapshot.child("registrosAgua").getChildren()) {
-
-                                                Long cantidad =
-                                                        agua.child("cantidad")
-                                                                .getValue(Long.class);
-
-                                                if (cantidad != null) {
-                                                    totalAgua += cantidad;
-                                                }
-                                            }
-                                        }
-
-                                        if (snapshot.child("registrosCoca").exists()) {
-                                            for (DataSnapshot coca :
-                                                    snapshot.child("registrosCoca").getChildren()) {
-
-                                                Long cantidad =
-                                                        coca.child("cantidad")
-                                                                .getValue(Long.class);
-
-                                                if (cantidad != null) {
-                                                    totalCoca += cantidad;
-                                                }
-                                            }
-                                        }
-
-                                        tvAguaConsumida.setText(totalAgua + " ml");
-                                        tvCocaEvitada.setText(totalCoca + " ml");
-
-
-                                        java.util.HashSet<String> diasConCoca =
-                                                new java.util.HashSet<>();
-
-                                        java.text.SimpleDateFormat formato =
-                                                new java.text.SimpleDateFormat(
-                                                        "yyyyMMdd",
-                                                        java.util.Locale.getDefault()
-                                                );
-
-                                        if (snapshot.child("registrosCoca").exists()) {
-                                            for (DataSnapshot coca :
-                                                    snapshot.child("registrosCoca").getChildren()) {
-
-                                                Long fecha = coca.child("fecha").getValue(Long.class);
-
-                                                if (fecha != null) {
-                                                    String dia = formato.format(new java.util.Date(fecha));
-                                                    diasConCoca.add(dia);
-                                                }
-                                            }
-                                        }
-
-                                        int racha = 0;
-                                        java.util.Calendar calendario = java.util.Calendar.getInstance();
-
-
-                                        for (int i = 0; i < 365; i++) {
-                                            String diaActual = formato.format(calendario.getTime());
-
-                                            if (diasConCoca.contains(diaActual)) {
-                                                break;
-                                            }
-
-                                            racha++;
-                                            calendario.add(java.util.Calendar.DAY_OF_YEAR, -1);
-                                        }
-
-                                        tvRachaActual.setText(racha + " días");
-                                    }
-
-                                    String foto =
-                                            snapshot.child("fotoPerfil")
-                                                    .getValue(String.class);
-
-                                    if (foto != null && !foto.isEmpty()) {
-                                        try {
-                                            imgPerfil.setImageURI(Uri.parse(foto));
-                                        } catch (Exception e) {
-                                            imgPerfil.setImageResource(R.drawable.ic_person);
-                                        }
-                                    } else {
-                                        imgPerfil.setImageResource(R.drawable.ic_person);
-                                    }
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error) {}
+                            long totalAgua = 0, totalCoca = 0;
+                            for (DataSnapshot a : snapshot.child("registrosAgua").getChildren()) {
+                                Long c = a.child("cantidad").getValue(Long.class);
+                                if (c != null) totalAgua += c;
                             }
-                    );
+                            for (DataSnapshot c : snapshot.child("registrosCoca").getChildren()) {
+                                Long cant = c.child("cantidad").getValue(Long.class);
+                                if (cant != null) totalCoca += cant;
+                            }
+                            tvAguaConsumida.setText(totalAgua + " ml");
+                            tvCocaEvitada.setText(totalCoca + " ml");
+
+
+                            SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
+                            HashSet<String> diasConCoca  = new HashSet<>();
+                            HashSet<String> diasConAgua  = new HashSet<>();
+
+                            for (DataSnapshot c : snapshot.child("registrosCoca").getChildren()) {
+                                Long f = c.child("fecha").getValue(Long.class);
+                                if (f != null) diasConCoca.add(fmt.format(new Date(f)));
+                            }
+                            for (DataSnapshot a : snapshot.child("registrosAgua").getChildren()) {
+                                Long f = a.child("fecha").getValue(Long.class);
+                                if (f != null) diasConAgua.add(fmt.format(new Date(f)));
+                            }
+
+                            int racha = 0;
+                            Calendar cal = Calendar.getInstance();
+
+                            for (int i = 0; i < 365; i++) {
+                                String dia = fmt.format(cal.getTime());
+                                boolean tuvoAgua = diasConAgua.contains(dia);
+                                boolean tuvoCoca = diasConCoca.contains(dia);
+
+                                if (i == 0 && !tuvoAgua && !tuvoCoca) {
+
+                                } else if (tuvoAgua && !tuvoCoca) {
+                                    racha++;
+                                } else {
+                                    break;
+                                }
+                                cal.add(Calendar.DAY_OF_YEAR, -1);
+                            }
+
+                            tvRachaActual.setText(racha + " días");
+
+
+                            String foto = snapshot.child("fotoPerfil").getValue(String.class);
+                            if (foto != null && !foto.isEmpty()) {
+                                try { imgPerfil.setImageURI(Uri.parse(foto)); }
+                                catch (Exception e) { imgPerfil.setImageResource(R.drawable.ic_person); }
+                            } else {
+                                imgPerfil.setImageResource(R.drawable.ic_person);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {}
+                    });
         }
 
         btnMiInformacion.setOnClickListener(v ->
-                requireActivity()
-                        .getSupportFragmentManager()
-                        .beginTransaction()
+                requireActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragmentContainer, new EditarPerfilFragment())
-                        .addToBackStack(null)
-                        .commit()
-        );
+                        .addToBackStack(null).commit());
 
         btnHistorial.setOnClickListener(v ->
-                requireActivity()
-                        .getSupportFragmentManager()
-                        .beginTransaction()
+                requireActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragmentContainer, new HistorialFragment())
-                        .addToBackStack(null)
-                        .commit()
-        );
+                        .addToBackStack(null).commit());
 
         btnCerrarSesion.setOnClickListener(v -> {
             FirebaseAuth.getInstance().signOut();
-            Intent intent = new Intent(requireActivity(), LoginActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
+            Intent i = new Intent(requireActivity(), LoginActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(i);
         });
     }
 }

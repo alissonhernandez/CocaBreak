@@ -21,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 public class HistorialFragment extends Fragment {
 
@@ -271,20 +272,7 @@ public class HistorialFragment extends Fragment {
         double litrosAgua =
                 mlAgua / 1000.0;
 
-        txtResumenCoca.setText(
-                "Coca-Cola: "
-                        + coca
-                        + " consumos ("
-                        + String.format("%.1f", litrosCoca)
-                        + " L)"
-        );
-
-        txtResumenAgua.setText(
-                " Agua: "
-                        + agua
-                        + " consumos ("
-                        + String.format("%.1f", litrosAgua)
-                        + " L)"
-        );
+        txtResumenCoca.setText(coca + " consumos · " + String.format(Locale.getDefault(), "%.1f", litrosCoca) + " L");
+        txtResumenAgua.setText(agua + " consumos · " + String.format(Locale.getDefault(), "%.1f", litrosAgua) + " L");
     }
 }

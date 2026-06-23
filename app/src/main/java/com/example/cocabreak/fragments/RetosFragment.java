@@ -199,7 +199,7 @@ public class RetosFragment extends Fragment {
                                 boolean finalReduccion50 = reduccion50;
 
                                 FirebaseDatabase.getInstance()
-                                        .getReference("chatGeneral")
+                                        .getReference("grupos/chatGeneral/mensajes")
                                         .get()
                                         .addOnSuccessListener(snapshotChat -> {
 
@@ -228,7 +228,7 @@ public class RetosFragment extends Fragment {
                                             retos.add(new Reto(
                                                     "Un Día Sin Coca",
                                                     "No consumir Coca-Cola durante 24 horas",
-                                                    finalCocaHoy == 0 ? "Completado" : "Pendiente",
+                                                    (registrosAgua[0] > 0 && finalCocaHoy == 0) ? "Completado" : "Pendiente",
                                                     false
                                             ));
 

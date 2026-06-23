@@ -74,7 +74,7 @@ public class HomeFragment extends Fragment {
         }
 
         if (cardChat != null) {
-            cardChat.setOnClickListener(v -> abrirFragment(new ChatFragment()));
+            cardChat.setOnClickListener(v -> abrirFragment(ChatFragment.newInstance("chatGeneral", "Chat General")));
         }
     }
 
@@ -193,7 +193,7 @@ public class HomeFragment extends Fragment {
 
 
         FirebaseDatabase.getInstance()
-                .getReference("chatGeneral")
+                .getReference("grupos/chatGeneral/mensajes")
                 .get()
                 .addOnSuccessListener(snapshot -> {
                     int cantidadMensajes = (int) snapshot.getChildrenCount();

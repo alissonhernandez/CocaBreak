@@ -15,13 +15,12 @@ import com.example.cocabreak.models.Historial;
 import com.google.android.material.card.MaterialCardView;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Calendar;
 
-public class HistorialAdapter
-        extends RecyclerView.Adapter<HistorialAdapter.ViewHolder> {
+public class HistorialAdapter extends RecyclerView.Adapter<HistorialAdapter.ViewHolder> {
 
     private final List<Historial> lista;
 
@@ -31,252 +30,111 @@ public class HistorialAdapter
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(
-            @NonNull ViewGroup parent,
-            int viewType) {
-
-        View view = LayoutInflater.from(
-                parent.getContext()
-        ).inflate(
-                R.layout.item_historial,
-                parent,
-                false
-        );
-
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_historial, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(
-            @NonNull ViewHolder holder,
-            int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        Historial h = lista.get(position);
 
-        Historial historial = lista.get(position);
-        String grupoFecha =
-                obtenerGrupoFecha(
-                        historial.getFecha()
-                );
 
+        String grupoFecha = obtenerGrupoFecha(h.getFecha());
         if (position == 0) {
-
-            holder.txtGrupoFecha.setVisibility(
-                    View.VISIBLE
-            );
-
-            holder.txtGrupoFecha.setText(
-                    grupoFecha
-            );
-
+            holder.txtGrupoFecha.setVisibility(View.VISIBLE);
+            holder.txtGrupoFecha.setText(grupoFecha);
         } else {
-
-            String grupoAnterior =
-                    obtenerGrupoFecha(
-                            lista.get(position - 1)
-                                    .getFecha()
-                    );
-
-            if (grupoFecha.equals(grupoAnterior)) {
-
-                holder.txtGrupoFecha.setVisibility(
-                        View.GONE
-                );
-
+            String anterior = obtenerGrupoFecha(lista.get(position - 1).getFecha());
+            if (grupoFecha.equals(anterior)) {
+                holder.txtGrupoFecha.setVisibility(View.GONE);
             } else {
-
-                holder.txtGrupoFecha.setVisibility(
-                        View.VISIBLE
-                );
-
-                holder.txtGrupoFecha.setText(
-                        grupoFecha
-                );
+                holder.txtGrupoFecha.setVisibility(View.VISIBLE);
+                holder.txtGrupoFecha.setText(grupoFecha);
             }
         }
 
-        holder.txtNombre.setText(
-                historial.getNombre()
-        );
 
-        if ("Agua".equals(historial.getTipo())) {
+        String nombre = h.getNombre() != null ? h.getNombre() : "";
+        holder.txtNombre.setText(nombre);
 
-            holder.txtTipo.setText(
-                    " Agua"
-            );
 
-            holder.cardHistorial.setCardBackgroundColor(
-                    Color.parseColor("#E3F2FD")
-            );
-
+        boolean esCoca = "Coca-Cola".equals(h.getTipo());
+        if (esCoca) {
+            holder.txtTipo.setText("Coca-Cola");
+            holder.txtTipo.setTextColor(Color.parseColor("#C62828"));
+            holder.cardHistorial.setCardBackgroundColor(Color.parseColor("#FFF5F5"));
+            holder.txtCantidad.setTextColor(Color.parseColor("#C62828"));
         } else {
-
-            holder.txtTipo.setText(
-                    "Coca-Cola"
-            );
-
-            holder.cardHistorial.setCardBackgroundColor(
-                    Color.parseColor("#FFEBEE")
-            );
+            holder.txtTipo.setText("Agua");
+            holder.txtTipo.setTextColor(Color.parseColor("#1565C0"));
+            holder.cardHistorial.setCardBackgroundColor(Color.parseColor("#F5F9FF"));
+            holder.txtCantidad.setTextColor(Color.parseColor("#1565C0"));
         }
 
-        String fecha =
-                new SimpleDateFormat(
-                        "dd/MM/yyyy HH:mm",
-                        Locale.getDefault()
-                ).format(
-                        new Date(historial.getFecha())
-                );
 
-        holder.txtFecha.setText(fecha);
+        holder.txtCantidad.setText(h.getCantidad() + " ml");
 
-        String nombre =
-                historial.getNombre() == null
-                        ? ""
-                        : historial.getNombre();
+
+        String hora = new SimpleDateFormat("hh:mm a", Locale.getDefault())
+                .format(new Date(h.getFecha()));
+        holder.txtFecha.setText(hora);
+
 
         if (nombre.contains("Mini")) {
-
-            holder.imgProducto.setImageResource(
-                    R.drawable.mini
-            );
-
+            holder.imgProducto.setImageResource(R.drawable.mini);
         } else if (nombre.contains("Lata")) {
-
-            holder.imgProducto.setImageResource(
-                    R.drawable.lata
-            );
-
+            holder.imgProducto.setImageResource(R.drawable.lata);
         } else if (nombre.contains("Vidrio")) {
-
-            holder.imgProducto.setImageResource(
-                    R.drawable.vidrio
-            );
-
+            holder.imgProducto.setImageResource(R.drawable.vidrio);
         } else if (nombre.contains("1.5")) {
-
-            holder.imgProducto.setImageResource(
-                    R.drawable.botella15
-            );
-
+            holder.imgProducto.setImageResource(R.drawable.botella15);
         } else if (nombre.contains("2.5")) {
-
-            holder.imgProducto.setImageResource(
-                    R.drawable.botella25
-            );
-
+            holder.imgProducto.setImageResource(R.drawable.botella25);
         } else if (nombre.contains("3 L")) {
-
-            holder.imgProducto.setImageResource(
-                    R.drawable.botella30
-            );
-
+            holder.imgProducto.setImageResource(R.drawable.botella30);
         } else if (nombre.contains("Vaso")) {
-
-            holder.imgProducto.setImageResource(
-                    R.drawable.vaso
-            );
-
-        } else if (nombre.contains("Botella")) {
-
-            holder.imgProducto.setImageResource(
-                    R.drawable.botella_agua
-            );
-
+            holder.imgProducto.setImageResource(R.drawable.vaso);
         } else {
-
-            holder.imgProducto.setImageResource(
-                    R.drawable.botella_agua
-            );
+            holder.imgProducto.setImageResource(R.drawable.botella_agua);
         }
     }
 
     @Override
-    public int getItemCount() {
-        return lista.size();
-    }
+    public int getItemCount() { return lista.size(); }
 
-    public static class ViewHolder
-            extends RecyclerView.ViewHolder {
-
+    static class ViewHolder extends RecyclerView.ViewHolder {
         MaterialCardView cardHistorial;
         ImageView imgProducto;
-        TextView txtNombre;
-        TextView txtTipo;
-        TextView txtFecha;
-        TextView txtGrupoFecha;
+        TextView txtNombre, txtTipo, txtFecha, txtGrupoFecha, txtCantidad;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-
-            cardHistorial =
-                    itemView.findViewById(
-                            R.id.cardHistorial
-                    );
-
-            imgProducto =
-                    itemView.findViewById(
-                            R.id.imgProducto
-                    );
-
-            txtNombre =
-                    itemView.findViewById(
-                            R.id.txtNombre
-                    );
-
-            txtTipo =
-                    itemView.findViewById(
-                            R.id.txtTipo
-                    );
-
-            txtFecha =
-                    itemView.findViewById(
-                            R.id.txtFecha
-                    );
-            txtGrupoFecha =
-                    itemView.findViewById(
-                            R.id.txtGrupoFecha
-                    );
+            cardHistorial  = itemView.findViewById(R.id.cardHistorial);
+            imgProducto    = itemView.findViewById(R.id.imgProducto);
+            txtNombre      = itemView.findViewById(R.id.txtNombre);
+            txtTipo        = itemView.findViewById(R.id.txtTipo);
+            txtFecha       = itemView.findViewById(R.id.txtFecha);
+            txtGrupoFecha  = itemView.findViewById(R.id.txtGrupoFecha);
+            txtCantidad    = itemView.findViewById(R.id.txtCantidad);
         }
     }
-    private String obtenerGrupoFecha(
-            long fechaMillis) {
 
-        Calendar hoy =
-                Calendar.getInstance();
+    private String obtenerGrupoFecha(long fechaMillis) {
+        Calendar hoy   = Calendar.getInstance();
+        Calendar fecha = Calendar.getInstance();
+        fecha.setTimeInMillis(fechaMillis);
 
-        Calendar fecha =
-                Calendar.getInstance();
-
-        fecha.setTimeInMillis(
-                fechaMillis
-        );
-
-        if (hoy.get(Calendar.YEAR)
-                == fecha.get(Calendar.YEAR)
-                &&
-                hoy.get(Calendar.DAY_OF_YEAR)
-                        == fecha.get(Calendar.DAY_OF_YEAR)) {
-
+        if (hoy.get(Calendar.YEAR) == fecha.get(Calendar.YEAR)
+                && hoy.get(Calendar.DAY_OF_YEAR) == fecha.get(Calendar.DAY_OF_YEAR)) {
             return "Hoy";
         }
-
-        hoy.add(
-                Calendar.DAY_OF_YEAR,
-                -1
-        );
-
-        if (hoy.get(Calendar.YEAR)
-                == fecha.get(Calendar.YEAR)
-                &&
-                hoy.get(Calendar.DAY_OF_YEAR)
-                        == fecha.get(Calendar.DAY_OF_YEAR)) {
-
+        hoy.add(Calendar.DAY_OF_YEAR, -1);
+        if (hoy.get(Calendar.YEAR) == fecha.get(Calendar.YEAR)
+                && hoy.get(Calendar.DAY_OF_YEAR) == fecha.get(Calendar.DAY_OF_YEAR)) {
             return "Ayer";
         }
-
-        return new SimpleDateFormat(
-                "dd/MM/yyyy",
-                Locale.getDefault()
-        ).format(
-                new Date(fechaMillis)
-        );
+        return new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date(fechaMillis));
     }
 }

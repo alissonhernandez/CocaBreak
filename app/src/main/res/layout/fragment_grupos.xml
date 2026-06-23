@@ -13,7 +13,6 @@
         app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
-        android:id="@+id/txtTitulo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Grupos"
@@ -36,12 +35,17 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+
             <EditText
                 android:id="@+id/etBuscarGrupo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Buscar grupos"
-                android:drawableStart="@drawable/ic_search"/>
+                android:drawableStart="@drawable/ic_search"
+                android:paddingStart="8dp"
+                android:background="@drawable/bg_input_rounded"
+                android:padding="10dp"/>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -51,26 +55,36 @@
                 android:layout_marginTop="12dp">
 
                 <com.google.android.material.button.MaterialButton
-                    android:layout_width="wrap_content"
+                    android:id="@+id/btnMisGrupos"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:text="Mis grupos"
+                    android:textSize="12sp"
                     app:backgroundTint="#F44336"/>
 
                 <com.google.android.material.button.MaterialButton
-                    android:layout_width="wrap_content"
+                    android:id="@+id/btnDescubrir"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:text="Descubrir"
-                    android:layout_marginStart="8dp"
-                    app:backgroundTint="#F44336"/>
+                    android:textSize="12sp"
+                    android:layout_marginStart="6dp"
+                    app:backgroundTint="#BDBDBD"/>
 
                 <com.google.android.material.button.MaterialButton
-                    android:layout_width="wrap_content"
+                    android:id="@+id/btnInvitaciones"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:text="Invitaciones"
-                    android:layout_marginStart="8dp"
-                    app:backgroundTint="#F44336"/>
+                    android:textSize="12sp"
+                    android:layout_marginStart="6dp"
+                    app:backgroundTint="#BDBDBD"/>
 
             </LinearLayout>
+
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvGrupos"
@@ -78,11 +92,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"/>
 
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnIrChat"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Abrir Conversaciones"
+                android:text="Abrir Chat General"
                 android:layout_marginTop="20dp"
                 app:backgroundTint="#F44336"/>
 
@@ -97,8 +112,8 @@
         android:src="@drawable/ic_add_white"
         app:backgroundTint="#F44336"
         app:tint="@android:color/white"
-        android:layout_marginEnd="40dp"
-        android:layout_marginBottom="40dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
