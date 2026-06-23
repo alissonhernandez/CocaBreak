@@ -32,206 +32,144 @@ public class LogrosFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(
-            @NonNull View view,
-            @Nullable Bundle savedInstanceState
-    ) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        recyclerLogros = view.findViewById(R.id.recyclerLogros);
+        recyclerLogros  = view.findViewById(R.id.recyclerLogros);
         tvCantidadLogros = view.findViewById(R.id.tvCantidadLogros);
-        tvPorcentaje = view.findViewById(R.id.tvPorcentaje);
-        progressLogros = view.findViewById(R.id.progressLogros);
+        tvPorcentaje    = view.findViewById(R.id.tvPorcentaje);
+        progressLogros  = view.findViewById(R.id.progressLogros);
 
-        recyclerLogros.setLayoutManager(
-                new GridLayoutManager(requireContext(), 2)
-        );
+        recyclerLogros.setLayoutManager(new GridLayoutManager(requireContext(), 2));
 
         cargarLogros();
     }
 
     private void cargarLogros() {
-
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
+        // Paso 1: datos del usuario (agua + coca)
         FirebaseDatabase.getInstance()
                 .getReference("usuarios")
                 .child(uid)
                 .get()
                 .addOnSuccessListener(snapshot -> {
 
-                    long totalAgua = 0;
-                    long totalCoca = 0;
+                    long totalAgua  = 0;
+                    long totalCoca  = 0;
+                    long regAgua    = 0;
+                    long regCoca    = 0;
 
-                    long registrosAgua = 0;
-                    long registrosCoca = 0;
-
-                    if (snapshot.child("registrosAgua").exists()) {
-
-                        for (DataSnapshot agua :
-                                snapshot.child("registrosAgua").getChildren()) {
-
-                            registrosAgua++;
-
-                            Long cantidad =
-                                    agua.child("cantidad")
-                                            .getValue(Long.class);
-
-                            if (cantidad != null) {
-                                totalAgua += cantidad;
-                            }
-                        }
+                    for (DataSnapshot d : snapshot.child("registrosAgua").getChildren()) {
+                        regAgua++;
+                        Long c = d.child("cantidad").getValue(Long.class);
+                        if (c != null) totalAgua += c;
+                    }
+                    for (DataSnapshot d : snapshot.child("registrosCoca").getChildren()) {
+                        regCoca++;
+                        Long c = d.child("cantidad").getValue(Long.class);
+                        if (c != null) totalCoca += c;
                     }
 
-                    if (snapshot.child("registrosCoca").exists()) {
+                    final long fAgua  = totalAgua;
+                    final long fCoca  = totalCoca;
+                    final long fReg   = regAgua + regCoca;
 
-                        for (DataSnapshot coca :
-                                snapshot.child("registrosCoca").getChildren()) {
+                    // Paso 2: buscar mensajes del usuario en todos los grupos
+                    FirebaseDatabase.getInstance()
+                            .getReference("grupos")
+                            .get()
+                            .addOnSuccessListener(gruposSnap -> {
 
-                            registrosCoca++;
+                                int mensajesEnviados = 0;
 
-                            Long cantidad =
-                                    coca.child("cantidad")
-                                            .getValue(Long.class);
+                                for (DataSnapshot grupo : gruposSnap.getChildren()) {
+                                    for (DataSnapshot msg : grupo.child("mensajes").getChildren()) {
+                                        String uidMsg = msg.child("uid").getValue(String.class);
+                                        if (uid.equals(uidMsg)) {
+                                            mensajesEnviados++;
+                                        }
+                                    }
+                                }
 
-                            if (cantidad != null) {
-                                totalCoca += cantidad;
-                            }
-                        }
-                    }
+                                // --- Condiciones de cada logro ---
+                                boolean primerDia        = fReg > 0;
+                                boolean hidratado        = fAgua >= 2000;
+                                boolean cambioInteligente = fAgua > fCoca;
+                                boolean usuarioActivo    = fReg >= 7;
+                                boolean hidratacionSem   = fAgua >= 10000;
+                                boolean miembroActivo    = mensajesEnviados >= 1;   // ← CORREGIDO
+                                boolean apoyoEquipo      = mensajesEnviados >= 5;   // ← CORREGIDO
+                                boolean reduccion50      = fCoca > 0 && fAgua >= fCoca * 2;
 
-                    ArrayList<Logro> logros =
-                            new ArrayList<>();
+                                ArrayList<Logro> logros = new ArrayList<>();
 
-                    boolean primerDia =
-                            registrosAgua + registrosCoca > 0;
+                                logros.add(new Logro("Primer Día",
+                                        "Registra tu primer consumo",
+                                        primerDia));
 
-                    boolean hidratado =
-                            totalAgua >= 2000;
+                                logros.add(new Logro("Hidratado",
+                                        "Bebe 2 litros de agua en un día",
+                                        hidratado));
 
-                    boolean cambioInteligente =
-                            totalAgua > totalCoca;
+                                logros.add(new Logro("Cambio Inteligente",
+                                        "Bebe más agua que Coca-Cola",
+                                        cambioInteligente));
 
-                    boolean usuarioActivo =
-                            registrosAgua + registrosCoca >= 7;
+                                logros.add(new Logro("Usuario Activo",
+                                        "Registra consumos durante varios días",
+                                        usuarioActivo));
 
+                                logros.add(new Logro("Racha 3 Días",
+                                        "Mantente 3 días sin Coca-Cola",
+                                        false));
 
-                    boolean racha3Dias = false;
+                                logros.add(new Logro("Racha 7 Días",
+                                        "Mantente 7 días sin Coca-Cola",
+                                        false));
 
-                    boolean racha7Dias = false;
+                                logros.add(new Logro("Hidratación Semanal",
+                                        "Consume 10 litros de agua en total",
+                                        hidratacionSem));
 
-                    boolean hidratacionSemanal =
-                            totalAgua >= 10000;
+                                logros.add(new Logro("Miembro Activo",
+                                        "Envía un mensaje en tu grupo",
+                                        miembroActivo));
 
-                    boolean miembroActivo = false;
+                                logros.add(new Logro("Apoyo al Equipo",
+                                        "Envía 5 mensajes en grupos",
+                                        apoyoEquipo));
 
-                    boolean apoyoEquipo = false;
+                                logros.add(new Logro("Reducción 50%",
+                                        "Duplica tu consumo de agua vs Coca-Cola",
+                                        reduccion50));
 
-                    boolean reduccion50 = false;
+                                // Contar desbloqueados antes de los especiales
+                                int desbloqueados = 0;
+                                for (Logro l : logros) {
+                                    if (l.isDesbloqueado()) desbloqueados++;
+                                }
 
-                    logros.add(new Logro(
-                            "Primer Día",
-                            "Completa tu primer día sin Coca-Cola",
-                            primerDia
-                    ));
+                                boolean semanaPerfecta = desbloqueados >= 10;
+                                logros.add(new Logro("Semana Perfecta",
+                                        "Desbloquea 10 logros",
+                                        semanaPerfecta));
+                                if (semanaPerfecta) desbloqueados++;
 
-                    logros.add(new Logro(
-                            "Hidratado",
-                            "Bebe 2 litros de agua en un día",
-                            hidratado
-                    ));
+                                boolean maestro = desbloqueados >= 11;
+                                logros.add(new Logro("Maestro CocaBreak",
+                                        "Desbloquea todos los logros",
+                                        maestro));
+                                if (maestro) desbloqueados++;
 
-                    logros.add(new Logro(
-                            "Cambio Inteligente",
-                            "Sustituye una Coca-Cola por agua",
-                            cambioInteligente
-                    ));
+                                int total = logros.size();
+                                tvCantidadLogros.setText(desbloqueados + " de " + total + " logros");
+                                progressLogros.setMax(total);
+                                progressLogros.setProgress(desbloqueados);
+                                tvPorcentaje.setText((desbloqueados * 100 / total) + "% completado");
 
-                    logros.add(new Logro(
-                            "Usuario Activo",
-                            "Registra consumos durante varios días",
-                            usuarioActivo
-                    ));
-
-                    logros.add(new Logro(
-                            "Racha 3 Días",
-                            "Mantente 3 días sin Coca-Cola",
-                            racha3Dias
-                    ));
-
-                    logros.add(new Logro(
-                            "Racha 7 Días",
-                            "Mantente 7 días sin Coca-Cola",
-                            racha7Dias
-                    ));
-
-                    logros.add(new Logro(
-                            "Hidratación Semanal",
-                            "Consume 10 litros de agua",
-                            hidratacionSemanal
-                    ));
-
-                    logros.add(new Logro(
-                            "Miembro Activo",
-                            "Participa en tu grupo",
-                            miembroActivo
-                    ));
-
-
-                    int desbloqueados = 0;
-
-                    for (Logro logro : logros) {
-                        if (logro.isDesbloqueado()) {
-                            desbloqueados++;
-                        }
-                    }
-
-                    boolean semanaPerfecta =
-                            desbloqueados >= 10;
-
-                    logros.add(new Logro(
-                            "Semana Perfecta",
-                            "Completa todos los retos",
-                            semanaPerfecta
-                    ));
-
-                    boolean maestro =
-                            desbloqueados >= 11;
-
-                    logros.add(new Logro(
-                            "Maestro CocaBreak",
-                            "Desbloquea todos los logros",
-                            maestro
-                    ));
-
-                    if (semanaPerfecta) desbloqueados++;
-                    if (maestro) desbloqueados++;
-
-                    int totalLogros =
-                            logros.size();
-
-                    tvCantidadLogros.setText(
-                            desbloqueados +
-                                    " de " +
-                                    totalLogros +
-                                    " logros"
-                    );
-
-                    progressLogros.setMax(totalLogros);
-                    progressLogros.setProgress(desbloqueados);
-
-                    int porcentaje =
-                            (desbloqueados * 100)
-                                    / totalLogros;
-
-                    tvPorcentaje.setText(
-                            porcentaje +
-                                    "% completado"
-                    );
-
-                    recyclerLogros.setAdapter(
-                            new LogroAdapter(logros)
-                    );
+                                recyclerLogros.setAdapter(new LogroAdapter(logros));
+                            });
                 });
     }
 }
