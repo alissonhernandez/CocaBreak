@@ -205,7 +205,8 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/txtRetoActivo"
                         android:layout_marginTop="12dp"
-                        android:progress="42"
+                        android:max="2000"
+                        android:progress="0"
                         android:progressTint="@color/coca_red" />
 
                     <TextView

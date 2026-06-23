@@ -51,19 +51,34 @@
         android:paddingEnd="20dp"
         tools:ignore="UseCompatTextViewDrawableXml" />
 
-    <EditText
-        android:id="@+id/edPassword"
-        style="@style/Widget.CocaBreak.EditText"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/bg_input_rounded"
-        android:drawableStart="@android:drawable/ic_secure"
-        android:drawablePadding="12dp"
-        android:hint="Contraseña"
-        android:inputType="textPassword|textNoSuggestions"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp" />
+        android:layout_marginTop="16dp">
+
+        <EditText
+            android:id="@+id/edPassword"
+            style="@style/Widget.CocaBreak.EditText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_input_rounded"
+            android:drawableStart="@android:drawable/ic_secure"
+            android:drawablePadding="12dp"
+            android:hint="Contraseña"
+            android:inputType="textPassword"
+            android:paddingStart="20dp"
+            android:paddingEnd="60dp" />
+
+        <ImageView
+            android:id="@+id/imgTogglePassword"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/ic_visibility_off" />
+
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/tvForgotPassword"

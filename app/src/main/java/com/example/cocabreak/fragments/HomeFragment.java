@@ -3,6 +3,7 @@ package com.example.cocabreak.fragments;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,6 +32,7 @@ public class HomeFragment extends Fragment {
 
     private TextView txtRetoActivo;
     private TextView txtRetoProgreso;
+    private ProgressBar progressReto;
     private TextView txtLogroReciente;
     private TextView txtDescripcionLogro;
 
@@ -53,6 +55,7 @@ public class HomeFragment extends Fragment {
 
         txtRetoActivo = view.findViewById(R.id.txtRetoActivo);
         txtRetoProgreso = view.findViewById(R.id.txtRetoProgreso);
+        progressReto = view.findViewById(R.id.progressReto);
         txtLogroReciente = view.findViewById(R.id.txtLogroReciente);
         txtDescripcionLogro = view.findViewById(R.id.txtDescripcionLogro);
 
@@ -166,13 +169,24 @@ public class HomeFragment extends Fragment {
                                 double litrosAgua = totalAguaMl / 1000.0;
                                 txtAguaHoy.setText(String.format(Locale.getDefault(), "%.1fL", litrosAgua));
 
+                                txtRetoActivo.setText("Hidratación Básica");
+
+                                int progreso = Math.min(totalAguaMl, 2000);
+
+                                progressReto.setMax(2000);
+                                progressReto.setProgress(progreso);
 
                                 if (totalAguaMl < 2000) {
-                                    txtRetoActivo.setText("Hidratación Básica");
-                                    txtRetoProgreso.setText(totalAguaMl + " / 2000 ml");
+
+                                    txtRetoProgreso.setText(
+                                            totalAguaMl + " / 2000 ml"
+                                    );
+
                                 } else {
-                                    txtRetoActivo.setText("Hidratación Básica");
-                                    txtRetoProgreso.setText("Completado");
+
+                                    txtRetoProgreso.setText(
+                                            "2000 / 2000 ml"
+                                    );
                                 }
 
 
