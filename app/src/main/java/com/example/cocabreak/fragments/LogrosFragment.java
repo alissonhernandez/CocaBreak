@@ -177,17 +177,6 @@ public class LogrosFragment extends Fragment {
                             miembroActivo
                     ));
 
-                    logros.add(new Logro(
-                            "Apoyo al Equipo",
-                            "Comenta publicaciones",
-                            apoyoEquipo
-                    ));
-
-                    logros.add(new Logro(
-                            "Reducción 50%",
-                            "Reduce tu consumo semanal",
-                            reduccion50
-                    ));
 
                     int desbloqueados = 0;
 

@@ -97,7 +97,7 @@ public class HistorialAdapter extends RecyclerView.Adapter<HistorialAdapter.View
         } else if (nombre.contains("Vaso")) {
             holder.imgProducto.setImageResource(R.drawable.vaso);
         } else {
-            holder.imgProducto.setImageResource(R.drawable.botella_agua);
+            holder.imgProducto.setImageResource(R.drawable.botella);
         }
     }
 
