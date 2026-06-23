@@ -9,6 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.widget.ImageView;
+
 import com.example.cocabreak.R;
 import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -58,6 +60,11 @@ public class HomeFragment extends Fragment {
         txtDescripcionLogro = view.findViewById(R.id.txtDescripcionLogro);
 
         cargarResumen();
+
+        ImageView imgCampana = view.findViewById(R.id.imgCampana);
+        if (imgCampana != null) {
+            imgCampana.setOnClickListener(v -> abrirFragment(new NotificacionesFragment()));
+        }
 
         MaterialCardView cardReto = view.findViewById(R.id.cardReto);
         MaterialCardView cardLogro = view.findViewById(R.id.cardLogro);
