@@ -69,13 +69,13 @@ public class PerfilFragment extends Fragment {
                                 Long cant = c.child("cantidad").getValue(Long.class);
                                 if (cant != null) totalCoca += cant;
                             }
-                            tvAguaConsumida.setText(totalAgua + " ml");
-                            tvCocaEvitada.setText(totalCoca + " ml");
+                            tvAguaConsumida.setText(String.format(Locale.getDefault(), "%.2f L", totalAgua / 1000.0));
+                            tvCocaEvitada.setText(String.format(Locale.getDefault(), "%.2f L", totalCoca / 1000.0));
 
 
                             SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
-                            HashSet<String> diasConCoca  = new HashSet<>();
-                            HashSet<String> diasConAgua  = new HashSet<>();
+                            HashSet<String> diasConCoca = new HashSet<>();
+                            HashSet<String> diasConAgua = new HashSet<>();
 
                             for (DataSnapshot c : snapshot.child("registrosCoca").getChildren()) {
                                 Long f = c.child("fecha").getValue(Long.class);
@@ -88,17 +88,26 @@ public class PerfilFragment extends Fragment {
 
                             int racha = 0;
                             Calendar cal = Calendar.getInstance();
+                            String hoy = fmt.format(cal.getTime());
+
+                            // Si hoy no hay ningún registro todavía, empezamos a contar desde ayer
+                            if (!diasConAgua.contains(hoy) && !diasConCoca.contains(hoy)) {
+                                cal.add(Calendar.DAY_OF_YEAR, -1);
+                            }
 
                             for (int i = 0; i < 365; i++) {
                                 String dia = fmt.format(cal.getTime());
                                 boolean tuvoAgua = diasConAgua.contains(dia);
                                 boolean tuvoCoca = diasConCoca.contains(dia);
 
-                                if (i == 0 && !tuvoAgua && !tuvoCoca) {
-
-                                } else if (tuvoAgua && !tuvoCoca) {
+                                if (tuvoAgua && !tuvoCoca) {
+                                    // Día perfecto: bebió agua y no tomó coca → suma a la racha
                                     racha++;
+                                } else if (!tuvoAgua && !tuvoCoca) {
+                                    // Día sin registros → corta la racha
+                                    break;
                                 } else {
+                                    // Tomó coca (con o sin agua) → corta la racha
                                     break;
                                 }
                                 cal.add(Calendar.DAY_OF_YEAR, -1);
