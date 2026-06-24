@@ -1,5 +1,9 @@
 package com.example.cocabreak.fragments;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
@@ -25,6 +29,9 @@ import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 
 public class EditarPerfilFragment extends Fragment {
@@ -36,7 +43,9 @@ public class EditarPerfilFragment extends Fragment {
     private AutoCompleteTextView spAnio;
     private AutoCompleteTextView etGenero;
     private ImageView imgPerfilEditar;
-    private String fotoUri = "";
+
+    private String fotoBase64 = "";
+    private static final int TAMANIO_FOTO = 300;
 
     private final ActivityResultLauncher<String>
             seleccionarImagenLauncher =
@@ -45,10 +54,7 @@ public class EditarPerfilFragment extends Fragment {
                     uri -> {
 
                         if (uri != null) {
-
-                            fotoUri = uri.toString();
-
-                            imgPerfilEditar.setImageURI(uri);
+                            procesarImagenSeleccionada(uri);
                         }
                     }
             );
@@ -175,8 +181,6 @@ public class EditarPerfilFragment extends Fragment {
                 etGenero.showDropDown()
         );
 
-
-
         ImageButton btnRegresar =
                 view.findViewById(R.id.btnRegresar);
 
@@ -188,9 +192,6 @@ public class EditarPerfilFragment extends Fragment {
         btnCambiarFoto.setOnClickListener(v ->
                 seleccionarImagenLauncher.launch("image/*")
         );
-
-
-
 
         btnRegresar.setOnClickListener(v ->
                 requireActivity()
@@ -259,16 +260,15 @@ public class EditarPerfilFragment extends Fragment {
 
                     if (foto != null && !foto.isEmpty()) {
 
-                        fotoUri = foto;
+                        fotoBase64 = foto;
 
                         try {
-
-                            imgPerfilEditar.setImageURI(
-                                    Uri.parse(foto)
-                            );
-
+                            byte[] bytes = android.util.Base64.decode(foto, android.util.Base64.DEFAULT);
+                            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                            if (bitmap != null) {
+                                imgPerfilEditar.setImageBitmap(bitmap);
+                            }
                         } catch (Exception ignored) {
-
                         }
                     }
 
@@ -308,12 +308,12 @@ public class EditarPerfilFragment extends Fragment {
                 "genero",
                 etGenero.getText().toString().trim()
         );
-        datos.put(
-                "fotoPerfil",
-                fotoUri
-        );
-
-
+        if (!fotoBase64.isEmpty()) {
+            datos.put(
+                    "fotoPerfil",
+                    fotoBase64
+            );
+        }
 
         FirebaseDatabase.getInstance()
                 .getReference("usuarios")
@@ -332,4 +332,73 @@ public class EditarPerfilFragment extends Fragment {
                             .popBackStack();
                 });
     }
+    private void procesarImagenSeleccionada(Uri uri) {
+        try {
+            Bitmap original = decodificarBitmap(uri);
+            if (original == null) {
+                Toast.makeText(requireContext(), "No se pudo cargar la imagen", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            original = corregirRotacion(uri, original);
+            Bitmap cuadrada = recortarCuadrado(original);
+            Bitmap redimensionada = Bitmap.createScaledBitmap(cuadrada, TAMANIO_FOTO, TAMANIO_FOTO, true);
+
+            imgPerfilEditar.setImageBitmap(redimensionada);
+            fotoBase64 = bitmapABase64(redimensionada);
+
+        } catch (Exception e) {
+            Toast.makeText(requireContext(), "No se pudo procesar la imagen", Toast.LENGTH_SHORT).show();
+        }
     }
+
+    private Bitmap decodificarBitmap(Uri uri) throws IOException {
+        try (InputStream input = requireContext().getContentResolver().openInputStream(uri)) {
+            return BitmapFactory.decodeStream(input);
+        }
+    }
+
+    private Bitmap corregirRotacion(Uri uri, Bitmap bitmap) {
+        try (InputStream input = requireContext().getContentResolver().openInputStream(uri)) {
+            if (input == null) return bitmap;
+
+            ExifInterface exif = new ExifInterface(input);
+            int orientacion = exif.getAttributeInt(
+                    ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+
+            float grados = 0f;
+            switch (orientacion) {
+                case ExifInterface.ORIENTATION_ROTATE_90: grados = 90f; break;
+                case ExifInterface.ORIENTATION_ROTATE_180: grados = 180f; break;
+                case ExifInterface.ORIENTATION_ROTATE_270: grados = 270f; break;
+            }
+
+            if (grados == 0f) return bitmap;
+
+            Matrix matrix = new Matrix();
+            matrix.postRotate(grados);
+            return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+
+        } catch (Exception e) {
+            return bitmap;
+        }
+    }
+
+    private Bitmap recortarCuadrado(Bitmap bitmap) {
+        int ancho = bitmap.getWidth();
+        int alto = bitmap.getHeight();
+        int lado = Math.min(ancho, alto);
+
+        int x = (ancho - lado) / 2;
+        int y = (alto - lado) / 2;
+
+        return Bitmap.createBitmap(bitmap, x, y, lado, lado);
+    }
+
+    private String bitmapABase64(Bitmap bitmap) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, baos);
+        byte[] bytes = baos.toByteArray();
+        return android.util.Base64.encodeToString(bytes, android.util.Base64.DEFAULT);
+    }
+}

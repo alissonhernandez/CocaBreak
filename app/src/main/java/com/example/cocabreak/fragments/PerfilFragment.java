@@ -118,8 +118,20 @@ public class PerfilFragment extends Fragment {
 
                             String foto = snapshot.child("fotoPerfil").getValue(String.class);
                             if (foto != null && !foto.isEmpty()) {
-                                try { imgPerfil.setImageURI(Uri.parse(foto)); }
-                                catch (Exception e) { imgPerfil.setImageResource(R.drawable.ic_person); }
+                                try {
+                                    byte[] bytes = android.util.Base64.decode(foto, android.util.Base64.DEFAULT);
+                                    android.graphics.Bitmap bitmap =
+                                            android.graphics.BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                                    if (bitmap != null) {
+                                        imgPerfil.setImageBitmap(bitmap);
+                                    } else {
+                                        imgPerfil.setImageResource(R.drawable.ic_person);
+                                    }
+                                } catch (Exception e) {
+                                    // Compatibilidad con fotos guardadas como URI en versiones anteriores
+                                    try { imgPerfil.setImageURI(Uri.parse(foto)); }
+                                    catch (Exception e2) { imgPerfil.setImageResource(R.drawable.ic_person); }
+                                }
                             } else {
                                 imgPerfil.setImageResource(R.drawable.ic_person);
                             }
