@@ -198,7 +198,55 @@ public class HistorialFragment extends Fragment {
                 });
     }
 
+    private void actualizarBotones(String filtro) {
+
+        btnTodos.setBackgroundTintList(
+                android.content.res.ColorStateList.valueOf(
+                        getResources().getColor(android.R.color.darker_gray)
+                )
+        );
+
+        btnCoca.setBackgroundTintList(
+                android.content.res.ColorStateList.valueOf(
+                        getResources().getColor(android.R.color.darker_gray)
+                )
+        );
+
+        btnAgua.setBackgroundTintList(
+                android.content.res.ColorStateList.valueOf(
+                        getResources().getColor(android.R.color.darker_gray)
+                )
+        );
+
+        if ("TODOS".equals(filtro)) {
+
+            btnTodos.setBackgroundTintList(
+                    android.content.res.ColorStateList.valueOf(
+                            getResources().getColor(R.color.coca_red)
+                    )
+            );
+
+        } else if ("COCA".equals(filtro)) {
+
+            btnCoca.setBackgroundTintList(
+                    android.content.res.ColorStateList.valueOf(
+                            getResources().getColor(R.color.coca_red)
+                    )
+            );
+
+        } else if ("AGUA".equals(filtro)) {
+
+            btnAgua.setBackgroundTintList(
+                    android.content.res.ColorStateList.valueOf(
+                            getResources().getColor(R.color.water_blue_btn)
+                    )
+            );
+        }
+    }
+
     private void mostrarTodos() {
+
+        actualizarBotones("TODOS");
 
         listaMostrar.clear();
         listaMostrar.addAll(listaCompleta);
@@ -208,13 +256,13 @@ public class HistorialFragment extends Fragment {
 
     private void mostrarCoca() {
 
+        actualizarBotones("COCA");
+
         listaMostrar.clear();
 
-        for (Historial item :
-                listaCompleta) {
+        for (Historial item : listaCompleta) {
 
-            if ("Coca-Cola".equals(
-                    item.getTipo())) {
+            if ("Coca-Cola".equals(item.getTipo())) {
 
                 listaMostrar.add(item);
             }
@@ -225,13 +273,13 @@ public class HistorialFragment extends Fragment {
 
     private void mostrarAgua() {
 
+        actualizarBotones("AGUA");
+
         listaMostrar.clear();
 
-        for (Historial item :
-                listaCompleta) {
+        for (Historial item : listaCompleta) {
 
-            if ("Agua".equals(
-                    item.getTipo())) {
+            if ("Agua".equals(item.getTipo())) {
 
                 listaMostrar.add(item);
             }
