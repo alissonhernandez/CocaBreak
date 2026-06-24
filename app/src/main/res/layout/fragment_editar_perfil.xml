@@ -47,13 +47,14 @@
             android:layout_gravity="center"
             android:layout_marginTop="24dp">
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/imgPerfilEditar"
                 android:layout_width="140dp"
                 android:layout_height="140dp"
                 android:background="@drawable/bg_foto_perfil"
                 android:padding="8dp"
                 android:src="@drawable/ic_person"/>
+
 
             <ImageButton
                 android:id="@+id/btnCambiarFoto"
@@ -65,8 +66,6 @@
                 android:src="@drawable/ic_camera"/>
 
         </FrameLayout>
-
-
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
